@@ -98,15 +98,15 @@ function mainOperation(){
 	console.log("[STARTUP]".yellow, `${botFunc.botIdent().activeBot.botName}`.green,"Loading Commands:".magenta,"🕗")
 
 	// Discord client setup
-	const serverIntents = new Discord.IntentsBitField(3276799);
-	const bot = new Discord.Client({ intents: serverIntents })
+	const serverIntents = new Discord.IntentsBitField(3276799)
+	const bot = new Discord.Client({ intents: serverIntents, partials: [Discord.Partials.User, Discord.Partials.Message, Discord.Partials.Channel, Discord.Partials.Reaction] })
 	/**
 	 * Loads command objects from the commands folder
 	 * @author  (testfax) Medi0cr3 @testfax
 	 */
 	let commandsColl = bot.commands = new Discord.Collection()
 	bot.on("ready", async() => {
-		await botFunc.deployCommands(commandsColl,REST,Routes,bot);
+		await botFunc.deployCommands(commandsColl,REST,Routes,bot)
 		botFunc.botLog(bot,new Discord.EmbedBuilder().setDescription(`💡 ${bot.user.username} online! logged in as ${bot.user.tag}`).setTitle(`${bot.user.username} Online`),0);
 		global.guild = bot.guilds.cache.first() 
 		if (botFunc.botIdent().activeBot.botName == 'GuardianAI') {

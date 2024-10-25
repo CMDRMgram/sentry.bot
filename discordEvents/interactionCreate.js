@@ -55,16 +55,12 @@ async function modalStuff(i) {
 }
 const exp = {
     interactionCreate: async (interaction,bot) => {
+        console.log(interaction)
         //!isModalSubmit() is not 100% required, you can gather any modal replies from within the codebase your working from.
         //!Enabling this will cause issues with the Opord modals as they are initiated from a button response and do not contain
         //!   the interaction.commandName pathing. It is dealt with from the client code itself.
         if (interaction.isModalSubmit()) {
             if (botIdent().activeBot.botName == 'GuardianAI') {
-                if (interaction.customId.startsWith("challengeProofModal")) {
-                    interaction.deferUpdate()
-                    console.log(interaction)
-                    return;
-                }
                 if (interaction.customId.startsWith("activeDuty")) {
                     await interaction.deferReply({ ephemeral: true });
                     const title = interaction.fields.getTextInputValue('title')

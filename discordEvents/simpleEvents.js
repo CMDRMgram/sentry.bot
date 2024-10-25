@@ -50,6 +50,47 @@ if (botIdent().activeBot.botName == "GuardianAI") {
 
 
 const exp = {
+    MessageReactionAdd: async (reaction, user) => {
+        // if (user.bot) return
+        console.log("HIT")
+        if (config[botIdent().activeBot.botName] == "GuardianAI") {
+            const PIN_EMOJI = '📌'
+            if (reaction.emoji.name === PIN_EMOJI) {
+                const authorized_role = config[botIdent().activeBot.botName].general_stuff.pin_reaction_authorization
+                const member = await reaction.message.guild.members.fetch(user.id)
+                if (member.roles.cache.some(role => authorized_role.includes(role.name))) {
+                    try {
+                        await reaction.message.pin()
+                        console.log(`Pinned message: ${reaction.message.id}`)
+                    } catch (error) {
+                        console.error('Failed to pin the message:', error)
+                    }
+                } else {
+                    await reaction.message.channel.send(`${user}, you don't have permission to pin messages!`)
+                }
+            }
+        }
+    },
+    MessageReactionRemove: async (reaction,user) => {
+        if (user.bot) return
+        if (config[botIdent().activeBot.botName] == "GuardianAI") {
+            const PIN_EMOJI = '📌'
+            if (reaction.emoji.name === PIN_EMOJI) {
+                const member = await reaction.message.guild.members.fetch(user.id)
+                const authorized_role = config[botIdent().activeBot.botName].general_stuff.pin_reaction_authorization
+                if (member.roles.cache.some(role => authorized_role.includes(role.name))) {
+                    try {
+                        await reaction.message.unpin()
+                        console.log(`Unpinned message: ${reaction.message.id}`)
+                    } catch (error) {
+                        console.error('Failed to unpin the message:', error)
+                    }
+                } else {
+                    await reaction.message.channel.send(`${user}, you don't have permission to unpin messages!`)
+                }
+            }
+        }
+    },
     guildMemberAdd: async (interaction, bot) => {
         if (process.env.MODE == 'testServer') {
              // The role IDs or names you want to assign
