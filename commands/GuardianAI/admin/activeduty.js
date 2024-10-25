@@ -23,9 +23,7 @@ module.exports = {
     ,
     permissions: 0,
     async execute(interaction) {
-
-        
-        const approvalRanks = config[botIdent().activeBot.botName].general_stuff.active_duty_mention_authorization
+        let approvalRanks = config[botIdent().activeBot.botName].general_stuff.active_duty_mention_authorization
         if (!approvalRanks) {
             console.log("[CAUTION]".bgYellow, "general_stuff.active_duty_mention_authorization ranks dont match. Defaulting to test server config. Check config.json")
             approvalRanks = config[botIdent().activeBot.botName].general_stuff.testServer.active_duty_mention_authorization

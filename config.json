@@ -173,7 +173,11 @@
             { "rank_name": "Captain", "id": "1176734589742481549"}
         ],
         "general_stuff": {
-            "pin_reaction_authorization": ["General Staff","Colonel","Major"],
+            "pin_reaction_authorization": [
+                { "rank_name": "General Staff", "id": "1173407686797303928", "emoji": "<:XSF_General:1232022156393709668>" },
+                { "rank_name": "Colonel", "id": "1176734917263102063", "emoji": "<:XSF_Colonel:1232022138576441364>" },
+                { "rank_name": "Major", "id": "1176734800103608461", "emoji": "<:XSF_Major:1232022119731302440>" }
+            ],
             "active_duty_mention_roleId": "1174573882070536242",
             "active_duty_mention_authorization": [
                 { "rank_name": "General Staff", "id": "1173407686797303928", "emoji": "<:XSF_General:1232022156393709668>" },
@@ -225,7 +229,11 @@
             ],
             "carrier_jump_room": "ready-room",
             "testServer": {
-                "pin_reaction_authorization": ["General Staff","Colonel","Major"],
+                "pin_reaction_authorization": [
+                    { "rank_name": "General Staff", "id": "961718365603393576" },
+                    { "rank_name": "Colonel", "id": "961718368270958692" },
+                    { "rank_name": "Major", "id": "961718369118216273"}
+                ],
                 "active_duty_mention_roleId": "961719609944313878",
                 "active_duty_mention_authorization": [
                     { "rank_name": "General Staff", "id": "961718365603393576" },

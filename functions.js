@@ -423,10 +423,14 @@ const thisBotFunctions = {
             return "malformed";
         }
     },
-    hasSpecifiedRole: (member,specifiedRanks) => {
+    hasSpecifiedRole: async (member,specifiedRanks) => {
         let approvalRanks = specifiedRanks
+        //todo FIX THIS SO ITS A DEFAULT SET
         if (!specifiedRanks) {
             approvalRanks = config[thisBotFunctions.botIdent().activeBot.botName].operation_order.opord_approval_ranks
+        }
+        if (!member.roles) {
+            member = await guild.members.fetch(member.id)
         }
         if (member && member.roles) {
             const roleIdsToCheck = approvalRanks.map(rank => rank.id);

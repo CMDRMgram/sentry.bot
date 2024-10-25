@@ -1,4 +1,4 @@
-const { botLog, botIdent, getRankEmoji } = require('../functions')
+const { botLog, botIdent, getRankEmoji, hasSpecifiedRole } = require('../functions')
 const Discord = require('discord.js')
 
 const database = require(`../${botIdent().activeBot.botName}/db/database`)
@@ -50,44 +50,71 @@ if (botIdent().activeBot.botName == "GuardianAI") {
 
 
 const exp = {
-    MessageReactionAdd: async (reaction, user) => {
-        // if (user.bot) return
-        console.log("HIT")
-        if (config[botIdent().activeBot.botName] == "GuardianAI") {
-            const PIN_EMOJI = '📌'
-            if (reaction.emoji.name === PIN_EMOJI) {
-                const authorized_role = config[botIdent().activeBot.botName].general_stuff.pin_reaction_authorization
-                const member = await reaction.message.guild.members.fetch(user.id)
-                if (member.roles.cache.some(role => authorized_role.includes(role.name))) {
-                    try {
-                        await reaction.message.pin()
-                        console.log(`Pinned message: ${reaction.message.id}`)
-                    } catch (error) {
-                        console.error('Failed to pin the message:', error)
-                    }
-                } else {
-                    await reaction.message.channel.send(`${user}, you don't have permission to pin messages!`)
-                }
+    [Discord.Events.MessageReactionAdd]: async (reaction, user) => {
+        if (user.bot) return
+        if (botIdent().activeBot.botName == "GuardianAI" && reaction.emoji.name === '📌') {
+            let approvalRanks = config[botIdent().activeBot.botName].general_stuff.pin_reaction_authorization
+            if (!approvalRanks) {
+                console.log("[CAUTION]".bgYellow, "general_stuff.pin_reaction_authorization ranks dont match. Defaulting to test server config. Check config.json")
+                approvalRanks = config[botIdent().activeBot.botName].general_stuff.testServer.pin_reaction_authorization
+            }
+            // const approvalRanks_string = approvalRanks.map(rank => rank.rank_name).join(', ').replace(/,([^,]*)$/, ', or$1')
+            const member = user;
+            if (hasSpecifiedRole(member, approvalRanks) == 0) {
+                return
+            }
+            
+            try {
+                await reaction.message.pin()
+                botLog(guild,new Discord.EmbedBuilder()
+                    .setDescription(`<@${user.id}> Pinned Message ${reaction.message.url}`)
+                    .setTitle(`REACTION: PIN MESSAGE`)
+                    ,1
+                    ,'info'
+                )
+            } 
+            catch (err) {
+                console.log(err)
+                botLog(interaction.guild,new Discord.EmbedBuilder()
+                    .setDescription('```' + err.stack + '```')
+                    .setTitle(`⛔ Fatal error experienced`)
+                    ,2
+                    ,'error'
+                )   
             }
         }
     },
-    MessageReactionRemove: async (reaction,user) => {
+    [Discord.Events.MessageReactionRemove]: async (reaction,user) => {
         if (user.bot) return
-        if (config[botIdent().activeBot.botName] == "GuardianAI") {
-            const PIN_EMOJI = '📌'
-            if (reaction.emoji.name === PIN_EMOJI) {
-                const member = await reaction.message.guild.members.fetch(user.id)
-                const authorized_role = config[botIdent().activeBot.botName].general_stuff.pin_reaction_authorization
-                if (member.roles.cache.some(role => authorized_role.includes(role.name))) {
-                    try {
-                        await reaction.message.unpin()
-                        console.log(`Unpinned message: ${reaction.message.id}`)
-                    } catch (error) {
-                        console.error('Failed to unpin the message:', error)
-                    }
-                } else {
-                    await reaction.message.channel.send(`${user}, you don't have permission to unpin messages!`)
-                }
+        if (botIdent().activeBot.botName == "GuardianAI" && reaction.emoji.name === '📌') {
+            let approvalRanks = config[botIdent().activeBot.botName].general_stuff.pin_reaction_authorization
+            if (!approvalRanks) {
+                console.log("[CAUTION]".bgYellow, "general_stuff.pin_reaction_authorization ranks dont match. Defaulting to test server config. Check config.json")
+                approvalRanks = config[botIdent().activeBot.botName].general_stuff.testServer.pin_reaction_authorization
+            }
+            // const approvalRanks_string = approvalRanks.map(rank => rank.rank_name).join(', ').replace(/,([^,]*)$/, ', or$1')
+            const member = user;
+            if (hasSpecifiedRole(member, approvalRanks) == 0) {
+                return
+            }
+            
+            try {
+                await reaction.message.unpin()
+                botLog(guild,new Discord.EmbedBuilder()
+                    .setDescription(`<@${user.id}> Un-Pinned Message ${reaction.message.url}`)
+                    .setTitle(`REACTION: UNPIN MESSAGE`)
+                    ,1
+                    ,'info'
+                )
+            } 
+            catch (err) {
+                console.log(err)
+                botLog(interaction.guild,new Discord.EmbedBuilder()
+                    .setDescription('```' + err.stack + '```')
+                    .setTitle(`⛔ Fatal error experienced`)
+                    ,2
+                    ,'error'
+                )   
             }
         }
     },

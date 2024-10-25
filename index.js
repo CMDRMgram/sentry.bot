@@ -109,6 +109,7 @@ function mainOperation(){
 		await botFunc.deployCommands(commandsColl,REST,Routes,bot)
 		botFunc.botLog(bot,new Discord.EmbedBuilder().setDescription(`💡 ${bot.user.username} online! logged in as ${bot.user.tag}`).setTitle(`${bot.user.username} Online`),0);
 		global.guild = bot.guilds.cache.first() 
+        
 		if (botFunc.botIdent().activeBot.botName == 'GuardianAI') {
 			const database = require(`./${botFunc.botIdent().activeBot.botName}/db/database`)
 			guardianai_vars = database
