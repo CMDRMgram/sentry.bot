@@ -87,6 +87,8 @@ const exp = {
     [Discord.Events.MessageReactionRemove]: async (reaction,user) => {
         if (user.bot) return
         if (botIdent().activeBot.botName == "GuardianAI" && reaction.emoji.name === '📌') {
+
+            //todo Thread Channel with parent id of #apply-for-ranks allowing Captain to pin messages in those Oporder Threads
             let approvalRanks = config[botIdent().activeBot.botName].general_stuff.pin_reaction_authorization
             if (!approvalRanks) {
                 console.log("[CAUTION]".bgYellow, "general_stuff.pin_reaction_authorization ranks dont match. Defaulting to test server config. Check config.json")
