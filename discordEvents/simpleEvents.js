@@ -53,70 +53,149 @@ const exp = {
     [Discord.Events.MessageReactionAdd]: async (reaction, user) => {
         if (user.bot) return
         if (botIdent().activeBot.botName == "GuardianAI" && reaction.emoji.name === '📌') {
-            let approvalRanks = config[botIdent().activeBot.botName].general_stuff.pin_reaction_authorization
-            if (!approvalRanks) {
-                console.log("[CAUTION]".bgYellow, "general_stuff.pin_reaction_authorization ranks dont match. Defaulting to test server config. Check config.json")
-                approvalRanks = config[botIdent().activeBot.botName].general_stuff.testServer.pin_reaction_authorization
+            const member = await guild.members.fetch(user.id)
+            const rank_types = {
+                opord_thread: () => { 
+                    if (process.env.MODE != "PROD") { 
+                        // console.log("[CAUTION]".bgYellow, "Check config.json file. guardianai.general_stuff.reaction.opord_thread_parentId. Using testServer input if available")
+                        return config[botIdent().activeBot.botName].general_stuff.testServer.reactions.opord_thread_parentId } 
+                    else { return config[botIdent().activeBot.botName].general_stuff.reactions.opord_thread_parentId }
+                },
+                captain: () => { 
+                    if (process.env.MODE != "PROD") { 
+                        console.log("[CAUTION]".bgYellow, "Check config.json file. guardianai.general_stuff.reaction.pin_reaction_authorization_captain. Using testServer input if available")
+                        return config[botIdent().activeBot.botName].general_stuff.testServer.reactions.pin_reaction_authorization_captain.map(i => i.rank_name) } 
+                    else { return config[botIdent().activeBot.botName].general_stuff.reactions.pin_reaction_authorization_captain.map(i => i.rank_name) }
+                },
+                higher: () => { 
+                    if (process.env.MODE != "PROD") { 
+                        console.log("[CAUTION]".bgYellow, "Check config.json file. guardianai.general_stuff.reaction.pin_reaction_authorization_higher. Using testServer input if available")
+                        return config[botIdent().activeBot.botName].general_stuff.testServer.reactions.pin_reaction_authorization_higher.map(i => i.rank_name) } 
+                    else { return config[botIdent().activeBot.botName].general_stuff.reactions.pin_reaction_authorization_higher.map(i => i.rank_name) }
+                },
+                captain_approved: 0,
+                higher_approved: 0
             }
-            // const approvalRanks_string = approvalRanks.map(rank => rank.rank_name).join(', ').replace(/,([^,]*)$/, ', or$1')
-            const member = user;
-            if (hasSpecifiedRole(member, approvalRanks) == 0) {
-                return
+            let roles = member.roles.cache.map(role=>role.name)
+            roles = roles.filter(x=>x != '@everyone')
+            rank_types.captain_approved = rank_types.captain().some(r => roles.includes(r))
+            rank_types.higher_approved = rank_types.higher().some(r => roles.includes(r))
+            if (rank_types.captain_approved) {
+                if (rank_types.opord_thread().includes(reaction.message.channel.parentId)) {
+                    try {
+                        await reaction.message.pin()
+                        botLog(guild,new Discord.EmbedBuilder()
+                            .setDescription(`<@${user.id}> Pinned Message ${reaction.message.url}`)
+                            .setTitle(`REACTION: PIN MESSAGE`)
+                            ,1
+                            ,'info'
+                        )
+                    } 
+                    catch (err) {
+                        console.log(err)
+                        botLog(interaction.guild,new Discord.EmbedBuilder()
+                            .setDescription('```' + err.stack + '```')
+                            .setTitle(`⛔ Fatal error experienced`)
+                            ,2
+                            ,'error'
+                        )   
+                    }
+                }
             }
-            
-            try {
-                await reaction.message.pin()
-                botLog(guild,new Discord.EmbedBuilder()
-                    .setDescription(`<@${user.id}> Pinned Message ${reaction.message.url}`)
-                    .setTitle(`REACTION: PIN MESSAGE`)
-                    ,1
-                    ,'info'
-                )
-            } 
-            catch (err) {
-                console.log(err)
-                botLog(interaction.guild,new Discord.EmbedBuilder()
-                    .setDescription('```' + err.stack + '```')
-                    .setTitle(`⛔ Fatal error experienced`)
-                    ,2
-                    ,'error'
-                )   
+            if (rank_types.higher_approved) {
+                try {
+                    await reaction.message.pin()
+                    botLog(guild,new Discord.EmbedBuilder()
+                        .setDescription(`<@${user.id}> Pinned Message ${reaction.message.url}`)
+                        .setTitle(`REACTION: PIN MESSAGE`)
+                        ,1
+                        ,'info'
+                    )
+                } 
+                catch (err) {
+                    console.log(err)
+                    botLog(interaction.guild,new Discord.EmbedBuilder()
+                        .setDescription('```' + err.stack + '```')
+                        .setTitle(`⛔ Fatal error experienced`)
+                        ,2
+                        ,'error'
+                    )   
+                }
             }
         }
     },
     [Discord.Events.MessageReactionRemove]: async (reaction,user) => {
         if (user.bot) return
         if (botIdent().activeBot.botName == "GuardianAI" && reaction.emoji.name === '📌') {
+            const member = await guild.members.fetch(user.id)
+            const rank_types = {
+                opord_thread: () => { 
+                    if (process.env.MODE != "PROD") { 
+                        // console.log("[CAUTION]".bgYellow, "Check config.json file. guardianai.general_stuff.reaction.opord_thread_parentId. Using testServer input if available")
+                        return config[botIdent().activeBot.botName].general_stuff.testServer.reactions.opord_thread_parentId } 
+                    else { return config[botIdent().activeBot.botName].general_stuff.reactions.opord_thread_parentId }
+                },
+                captain: () => { 
+                    if (process.env.MODE != "PROD") { 
+                        console.log("[CAUTION]".bgYellow, "Check config.json file. guardianai.general_stuff.reaction.pin_reaction_authorization_captain. Using testServer input if available")
+                        return config[botIdent().activeBot.botName].general_stuff.testServer.reactions.pin_reaction_authorization_captain.map(i => i.rank_name) } 
+                    else { return config[botIdent().activeBot.botName].general_stuff.reactions.pin_reaction_authorization_captain.map(i => i.rank_name) }
+                },
+                higher: () => { 
+                    if (process.env.MODE != "PROD") { 
+                        console.log("[CAUTION]".bgYellow, "Check config.json file. guardianai.general_stuff.reaction.pin_reaction_authorization_higher. Using testServer input if available")
+                        return config[botIdent().activeBot.botName].general_stuff.testServer.reactions.pin_reaction_authorization_higher.map(i => i.rank_name) } 
+                    else { return config[botIdent().activeBot.botName].general_stuff.reactions.pin_reaction_authorization_higher.map(i => i.rank_name) }
+                },
+                captain_approved: 0,
+                higher_approved: 0
+            }
+            let roles = member.roles.cache.map(role=>role.name)
+            roles = roles.filter(x=>x != '@everyone')
+            rank_types.captain_approved = rank_types.captain().some(r => roles.includes(r))
+            rank_types.higher_approved = rank_types.higher().some(r => roles.includes(r))
 
-            //todo Thread Channel with parent id of #apply-for-ranks allowing Captain to pin messages in those Oporder Threads
-            let approvalRanks = config[botIdent().activeBot.botName].general_stuff.pin_reaction_authorization
-            if (!approvalRanks) {
-                console.log("[CAUTION]".bgYellow, "general_stuff.pin_reaction_authorization ranks dont match. Defaulting to test server config. Check config.json")
-                approvalRanks = config[botIdent().activeBot.botName].general_stuff.testServer.pin_reaction_authorization
+            if (rank_types.captain_approved) {
+                if (rank_types.opord_thread().includes(reaction.message.channel.parentId)) {
+                    try {
+                        await reaction.message.unpin()
+                        botLog(guild,new Discord.EmbedBuilder()
+                            .setDescription(`<@${user.id}> Un-Pinned Message ${reaction.message.url}`)
+                            .setTitle(`REACTION: UN-PIN MESSAGE`)
+                            ,1
+                            ,'info'
+                        )
+                    } 
+                    catch (err) {
+                        console.log(err)
+                        botLog(interaction.guild,new Discord.EmbedBuilder()
+                            .setDescription('```' + err.stack + '```')
+                            .setTitle(`⛔ Fatal error experienced`)
+                            ,2
+                            ,'error'
+                        )   
+                    }
+                }
             }
-            // const approvalRanks_string = approvalRanks.map(rank => rank.rank_name).join(', ').replace(/,([^,]*)$/, ', or$1')
-            const member = user;
-            if (hasSpecifiedRole(member, approvalRanks) == 0) {
-                return
-            }
-            
-            try {
-                await reaction.message.unpin()
-                botLog(guild,new Discord.EmbedBuilder()
-                    .setDescription(`<@${user.id}> Un-Pinned Message ${reaction.message.url}`)
-                    .setTitle(`REACTION: UNPIN MESSAGE`)
-                    ,1
-                    ,'info'
-                )
-            } 
-            catch (err) {
-                console.log(err)
-                botLog(interaction.guild,new Discord.EmbedBuilder()
-                    .setDescription('```' + err.stack + '```')
-                    .setTitle(`⛔ Fatal error experienced`)
-                    ,2
-                    ,'error'
-                )   
+            if (rank_types.higher_approved) {
+                try {
+                    await reaction.message.unpin()
+                    botLog(guild,new Discord.EmbedBuilder()
+                        .setDescription(`<@${user.id}> Un-Pinned Message ${reaction.message.url}`)
+                        .setTitle(`REACTION: UN-PIN MESSAGE`)
+                        ,1
+                        ,'info'
+                    )
+                } 
+                catch (err) {
+                    console.log(err)
+                    botLog(interaction.guild,new Discord.EmbedBuilder()
+                        .setDescription('```' + err.stack + '```')
+                        .setTitle(`⛔ Fatal error experienced`)
+                        ,2
+                        ,'error'
+                    )   
+                }
             }
         }
     },
