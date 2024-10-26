@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
 const { botIdent, getRankEmoji, botLog, variableCheck } = require('../../../functions')
-
 const { saveBulkMessages, removeBulkMessages } = require('../promotionRequest/prFunctions')
 const { requestInfo } = require('../../../socket/taskManager')
 const config = require('../../../config.json')

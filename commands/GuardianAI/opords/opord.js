@@ -723,6 +723,19 @@ module.exports = {
                                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);
                             `
                         await database.query(new_sql, new_values)
+                        const readyRoom = config[botIdent().activeBot.botName].operation_order.opord_thread_parentId
+    
+                        
+                        let channelObj = interaction.guild.channels.cache.get(readyRoom)
+                        await channelObj.threads.create({
+                            name: `OPORD#${previous_opord_number_response[0].opord_number + 1} ${strikePackage.find(i => i.name === 'operation_name').value}`,
+                            autoArchiveDuration: 4320,
+                            type: Discord.ChannelType.PublicThread,
+                            reason: "New Oporder",
+                            message: { content: 
+                                strikePackage.find(i => i.name === 'mission_statement').value
+                             } 
+                        })
                     }).catch(console.error)
                 }
             }

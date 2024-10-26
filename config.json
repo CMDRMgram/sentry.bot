@@ -138,6 +138,7 @@
             { "rank_name": "Lieutenant", "id": "1176734436746874910"}
         ],
         "operation_order": {
+            "opord_thread_parentId": "1173385943005274196",
             "opord_channel_approved": "1178034779896160256",
             "opord_channel_await": "1184592283337752697",
             "opord_approval_ranks": [
