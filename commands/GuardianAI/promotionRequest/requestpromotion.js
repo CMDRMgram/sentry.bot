@@ -24,7 +24,7 @@ function getPercentage(part, whole) {
     if (whole === 0) return 0 // Avoid division by zero
     return ((part / whole) * 100).toFixed(2)
 }
-axiSelection = null
+// axiSelection = null
 
 module.exports = {
     cleanup: async function(requestor,nextRank,decision,leadership_thread,requestor_potential) { 
@@ -584,19 +584,19 @@ module.exports = {
     },
     showAXIroles: async function (userId,threadEmbeds,promotion) {
         let person_asking = userId
-        let subject = null
-        if (axiSelection == "nextranknotfound") { 
-            subject = guild.members.cache.get("418756893784145920")
-        }
-        if (axiSelection == "no") { 
-            subject = guild.members.cache.get("206440307867385857")
-        }
-        if (axiSelection == "yes") {
-            subject = guild.members.cache.get(userId)
-        }
-        if (!axiSelection)  {
-            subject = guild.members.cache.get(userId)
-        }
+        let subject = guild.members.cache.get(userId)
+        // if (axiSelection == "nextranknotfound") { 
+        //     subject = guild.members.cache.get("418756893784145920")
+        // }
+        // if (axiSelection == "no") { 
+        //     subject = guild.members.cache.get("206440307867385857")
+        // }
+        // if (axiSelection == "yes") {
+        //     subject = guild.members.cache.get(userId)
+        // }
+        // if (!axiSelection)  {
+        //     subject = guild.members.cache.get(userId)
+        // }
         const member = guild.members.cache.get(userId)
         let roles = member.roles.cache.map(role=>role.name)
         roles = roles.filter(x=>x != '@everyone')
@@ -1532,14 +1532,14 @@ module.exports = {
     data: new Discord.SlashCommandBuilder()
         .setName('requestpromotion') 
         .setDescription('Start your Promotion Request')
-        .addStringOption(option =>
-            option.setName('axi')
-                .setDescription('Choose Yes or No for user IN AXI server')
-                .setRequired(true)
-                .addChoices({ name: "Yes", value: "yes"})
-                .addChoices({ name: "No", value: "no"})
-                .addChoices({ name: "Next Rank Not Found", value: "nextranknotfound"})
-        )
+        // .addStringOption(option =>
+        //     option.setName('axi')
+        //         .setDescription('Choose Yes or No for user IN AXI server')
+        //         .setRequired(true)
+        //         .addChoices({ name: "Yes", value: "yes"})
+        //         .addChoices({ name: "No", value: "no"})
+        //         .addChoices({ name: "Next Rank Not Found", value: "nextranknotfound"})
+        // )
     ,
     async execute(interaction) {
         if (process.env.MODE != "PROD") {
@@ -1548,7 +1548,7 @@ module.exports = {
         else {
             await interaction.deferReply({ ephemeral: true })
         }
-        axiSelection = interaction.options.data.find(arg => arg.name === 'axi').value
+        // axiSelection = interaction.options.data.find(arg => arg.name === 'axi').value
         const roles = interaction.member.roles.cache.map(r=>r.name)
         const current_xsf_role = config[botIdent().activeBot.botName].general_stuff.allRanks.map(r=>r.rank_name).filter(value => roles.includes(value))[0]
         const reject_roles = ['General Staff','Colonel','Major','Captain']
