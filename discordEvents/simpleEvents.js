@@ -889,10 +889,10 @@ const exp = {
             } 
         }
     },
-    messageDelete: async (message, bot) => {
+    messageDelete: async (message) => {
         if (!message.author.bot && !knowledge_proficiency.includes(message.channel.parentId) ) {  
             try {
-                botLog(bot,new Discord.EmbedBuilder().setDescription(`Message deleted by user: ${message.author}` + '```' + `${message.content}` + '```').setTitle(`Message Deleted 🗑️`),1)
+                botLog(message.guild,new Discord.EmbedBuilder().setDescription(`Message deleted by user: ${message.author}` + '```' + `${message.content}` + '```').setTitle(`Message Deleted 🗑️`),1)
             } 
             catch (err) {
                 console.log(err)
