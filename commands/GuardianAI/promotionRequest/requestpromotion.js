@@ -432,7 +432,7 @@ module.exports = {
                         "basic": "Sole Survivor",
                         "advanced": "Serpent's Nemesis",
                         "master": "Collector",
-                    }
+                    } 
                     const requestor_receivedEmbed = requestor_challenge.embeds[0]
                     const requestor_oldEmbedSchema = {
                         title: requestor_receivedEmbed.title,
