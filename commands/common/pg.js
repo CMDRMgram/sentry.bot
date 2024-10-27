@@ -29,8 +29,7 @@ module.exports = {
                     `5. Return to the menu, select Start > Private Group > ${botIdent().activeBot.communityName} > Join Group\n`
                 )
                 .setFooter({ text: `Joining ${botIdent().activeBot.communityName} Private Group`, iconURL: botIdent().activeBot.icon });
-            if (rulesChannelId) { 
-                console.log(rulesChannelId)
+            if (rulesChannelId) {
                 returnEmbed.addFields({ name: "Rules:", value: `Please read the Private Group Rules before joining: <#${rulesChannelId.id}>`, inline: false })
             }
             interaction.reply({ embeds: [returnEmbed] })
