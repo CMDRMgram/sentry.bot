@@ -1,10 +1,14 @@
 /**
  @description * Changing the 'Type' variable to 'null' results in production level mode automatically and the name of the bot being declared by the .env file.
  @description * Enter a declared DEV mode by naming the bot.
+ @description * process.env.MODE being labeled anything, but "PROD" will designate a dev server
  */
 let type = null;
-// let type = "GuardianAI"
-// let type = "Warden"
+if (process.env.MODE != "PROD") {
+	// type = "GuardianAI"
+	// type = "Warden"
+}
+
 
 //! Modularity for codebase. Stff
 /**
@@ -212,35 +216,16 @@ function mainOperation(){
 					})
 				}
 
-				cron.schedule('*/5 * * * *', function () {
-					// backupClubRoles()
-					// console.log("Reminder to implement backup features for roles.")
-				});
+				// cron.schedule('*/5 * * * *', function () {
+				// 	//TODO REBUILD THIS, not absolutely necessary, as people that leave the server showup in the staff channel with all previous roles.
+				// 	// backupClubRoles()
+				// 	// console.log("Reminder to implement backup features for roles.")
+				// });
 				/**
 				 * Role backup system, takes the targetted role and table and backs up to SQL database.
 				 * @author  (Mgram) Marcus Ingram @MgramTheDuck
 				 */
-				// async function backupClubRoles() {
-				// 	let guilds = bot.guilds.cache.map((guild) => guild);
-				// 	let guild = guilds[0]
-				// 	await guild.members.fetch()
-				// 	let members = guild.roles.cache.get('974673947784269824').members.map(m=>m.user)
-				// 	try {
-				// 		await warden_vars.query(`DELETE FROM club10`)
-				// 	} catch (err) {
-				// 		console.log(`Unable to delete rows from table`)
-				// 		return;
-				// 	}
-				// 	for (let member of members) {
-				// 		let name = await guild.members.cache.get(member.id).nickname
-				// 		await warden_vars.query(`INSERT INTO club10(user_id, name, avatar) VALUES($1,$2,$3)`, [
-				// 			member.id,
-				// 			name,
-				// 			member.avatar
-				// 		])
-				// 	}
-				// 	console.log('Club 10 table updated')
-				// }
+				
 				// //the following part handles the triggering of reminders
 				// let minutes = 0.1, the_interval = minutes * 60 * 1000; //this sets at what interval are the reminder due times getting checked
 				// setInterval(async function() {
