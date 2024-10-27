@@ -16,6 +16,7 @@ module.exports = {
                 rulesChannelId = channels.find(
                     channel => channel.name === config[botIdent().activeBot.botName].channels.privateGroupRules
                 ).id
+                console.log(rulesChannelId)
             }
     
             let returnEmbed = new Discord.EmbedBuilder()
