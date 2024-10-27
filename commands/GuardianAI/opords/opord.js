@@ -605,7 +605,7 @@ module.exports = {
                             })
 
                             const embedLink = `https://discord.com/channels/${approved_embed.guildId}/${approved_embed.channelId}/${channel_approved.lastMessageId}`;
-                            createEvent(interaction, embedLink,response.id)
+                            createEvent(interaction, embedLink,response.id,approved_embed)
                         }
                         if (selection == 'Deny') {
                             response.edit({
@@ -644,7 +644,7 @@ module.exports = {
                     interaction.guild.channels.cache.get(process.env.LOGCHANNEL).send({ content: `⛔ OPORD Fail. Permissions or Wrong Channel. Fatal error experienced:\n ${e.stack}` })
                 }
             }
-            async function createEvent(interaction, embedLink,await_message_id) {
+            async function createEvent(interaction, embedLink,await_message_id,approved_embed) {
                 const guild = interaction.guild
                 let entityType = null
                 if (!guild) return console.log('Guild not found: createEvent() opord.js');
@@ -682,7 +682,49 @@ module.exports = {
                             entityMetadata: {
                                 location: channelName
                             }
-                        });
+                        })
+                        let readyRoom = null; 
+                        if (process.env.MODE != "PROD") { 
+                            readyRoom = config[botIdent().activeBot.botName].general_stuff.testServer.operation_order.opord_thread_parentId
+                        }
+                        else {
+                            readyRoom = config[botIdent().activeBot.botName].operation_order.opord_thread_parentId
+                        }
+                        let channelObj = interaction.guild.channels.cache.get(readyRoom)
+                        const thread = await channelObj.threads.create({
+                            name: `OPORD#${previous_opord_number_response[0].opord_number + 1} ${strikePackage.find(i => i.name === 'operation_name').value}`,
+                            autoArchiveDuration: 4320,
+                            type: Discord.ChannelType.PublicThread,
+                            reason: "New Oporder",
+                            message: { content: 
+                                strikePackage.find(i => i.name === 'mission_statement').value
+                             } 
+                        })
+                        const receivedEmbed = approved_embed.embeds[0]
+                        const oldEmbedSchema = {
+                            title: receivedEmbed.title,
+                            author: receivedEmbed.author,
+                            description: receivedEmbed.description,
+                            color: receivedEmbed.color,
+                            fields: receivedEmbed.fields
+                        }
+                        const newEmbed = new Discord.EmbedBuilder()
+                            .setTitle(oldEmbedSchema.title)
+                            .setDescription(oldEmbedSchema.description)
+                            .setColor(oldEmbedSchema.color)
+                            .setAuthor(oldEmbedSchema.author)
+                            .setThumbnail(botIdent().activeBot.icon)
+                            oldEmbedSchema.fields.forEach((i,index) => {
+                            if (i.name == "Mission Statement") { 
+                                newEmbed.addFields(
+                                    { name: i.name, value: `${i.value} ${thread.url}`, inline: i.inline}
+                                )
+                            }
+                            else {
+                                newEmbed.addFields({ name: i.name, value: i.value, inline: i.inline })
+                            }
+                        })
+                        await approved_embed.edit( { embeds: [newEmbed] } )
                         let new_values = [
                             timeSlot,
                             previous_opord_number_response[0].opord_number + 1,
@@ -697,6 +739,7 @@ module.exports = {
                             strikePackage.find(i => i.name === 'prefered_build').value,
                             strikePackage.find(i => i.name === 'voice_channel').value,
                             strikePackage.find(i => i.name === 'additional_instructions').value,
+                            thread.id
                         ]
                         botLog(interaction.guild,new Discord.EmbedBuilder()
                         .setDescription(`${interaction.member.nickname} Used this command. Created Op Order #:**${previous_opord_number_response[0].opord_number + 1}**`)
@@ -718,24 +761,13 @@ module.exports = {
                                     carrier_parking,
                                     prefered_build,
                                     voice_channel,
-                                    additional_instructions
+                                    additional_instructions,
+                                    threadId
                                 ) 
-                                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);
+                                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);
                             `
                         await database.query(new_sql, new_values)
-                        const readyRoom = config[botIdent().activeBot.botName].operation_order.opord_thread_parentId
-    
                         
-                        let channelObj = interaction.guild.channels.cache.get(readyRoom)
-                        await channelObj.threads.create({
-                            name: `OPORD#${previous_opord_number_response[0].opord_number + 1} ${strikePackage.find(i => i.name === 'operation_name').value}`,
-                            autoArchiveDuration: 4320,
-                            type: Discord.ChannelType.PublicThread,
-                            reason: "New Oporder",
-                            message: { content: 
-                                strikePackage.find(i => i.name === 'mission_statement').value
-                             } 
-                        })
                     }).catch(console.error)
                 }
             }

@@ -936,22 +936,29 @@ const exp = {
             //XSF specific
             try {
                 const opord_number_values = [event.id]
-                const opord_number_sql = 'SELECT opord_number FROM opord WHERE event_id = ?';
+                const opord_number_sql = 'SELECT opord_number,threadId FROM opord WHERE event_id = ?';
                 const opord_number_response = await database.query(opord_number_sql, opord_number_values)
                 const opordToDelete = opord_number_response[0].opord_number;
                 if (opordToDelete) {
                     try {
+                        const threadId =  await event.guild.channels.fetch(opord_number_response[0].threadId)
+                        if (threadId) { threadId.delete() }
+                        
+                        
                         const guild = event.guild;
-                        // Get opord channels
+                        // Get opord channels  
                         let channel_await = null;
                         let channel_approved = null;
-                        channel_await = event.guild.channels.cache.get(config[botIdent().activeBot.botName].operation_order.opord_channel_await); //logchannel or other.
-                        channel_approved = event.guild.channels.cache.get(config[botIdent().activeBot.botName].operation_order.opord_channel_approved); //opord channel where approved op orders appear
-                        if (!channel_await || !channel_approved) {
-                            console.log("[CAUTION]".bgYellow, "channel_await or channel_approved Channel IDs dont match. Check config. Defaulting to Test Server configuration in the .env file.")
-                            channel_await = event.guild.channels.cache.get(process.env.TESTSERVER_OPORD_AWAIT); //GuardianAI.env
-                            channel_approved = event.guild.channels.cache.get(process.env.TESTSERVER_OPORD_APPROVED); //GuardianAI.env
+                        if (process.env.MODE != "PROD") { 
+                            console.log("[CAUTION]".bgYellow, "channel_await or channel_approved Channel IDs dont match. Check config. Defaulting to Test Server configuration in the config.json file")
+                            channel_await = event.guild.channels.cache.get(config[botIdent().activeBot.botName].general_stuff.testServer.operation_order.opord_channel_await); //GuardianAI.env
+                            channel_approved = event.guild.channels.cache.get(config[botIdent().activeBot.botName].general_stuff.testServer.operation_order.opord_channel_approved); //GuardianAI.env
                         }
+                        else {
+                            channel_await = event.guild.channels.cache.get(config[botIdent().activeBot.botName].operation_order.opord_channel_await); //logchannel or other.
+                            channel_approved = event.guild.channels.cache.get(config[botIdent().activeBot.botName].operation_order.opord_channel_approved); //opord channel where approved op orders appear
+                        }
+
                         //delete oporder and emssage
                         const delete_embed_opord_number_sql = 'SELECT approved_message_id,await_message_id FROM opord WHERE opord_number = ?';
                         const delete_embed_opord_number_response = await database.query(delete_embed_opord_number_sql, opordToDelete)
@@ -967,7 +974,7 @@ const exp = {
                         const update_sql = 'UPDATE opord SET opord_number = opord_number - 1 WHERE opord_number > ?';
                         await database.query(update_sql, opordToDelete);
                         //Get all remaining rows to update embed.
-                        const embed_opord_number_sql = 'SELECT event_id,approved_message_id,await_message_id,creator FROM opord WHERE opord_number >= ?';
+                        const embed_opord_number_sql = 'SELECT event_id,approved_message_id,await_message_id,creator,threadId FROM opord WHERE opord_number >= ?';
                         const embed_number_response = await database.query(embed_opord_number_sql, opordToDelete)
                         if (embed_number_response) {
                             function editedEmbed(lastMessage,creator) {
@@ -1009,6 +1016,7 @@ const exp = {
                             //     event.edit({ description: description })
                             // }
                             embed_number_response.forEach(async items=>{
+                                
                                 //modify the events list description for operation order
                                 // const thisEvent = await channel_approved.guild.scheduledEvents.fetch(items.event_id)
                                 // editEventList(thisEvent)
