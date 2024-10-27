@@ -7,16 +7,12 @@ module.exports = {
         .setDescription(`Posts info on how to join the ${botIdent().activeBot.communityName} Private Group`),
     // .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     permissions: 0,
-    execute(interaction) {
+    async execute(interaction) {
         
         try {
-            const channels = interaction.guild.channels.cache;
             let rulesChannelId = null;
             if (config[botIdent().activeBot.botName]?.channels?.privateGroupRules !== undefined) { 
-                rulesChannelId = channels.find(
-                    channel => channel.name === config[botIdent().activeBot.botName].channels.privateGroupRules
-                ).id
-                console.log(rulesChannelId)
+                rulesChannelId = await interaction.guild.channels.fetch(config[botIdent().activeBot.botName].channels.privateGroupRules)
             }
     
             let returnEmbed = new Discord.EmbedBuilder()
@@ -34,7 +30,7 @@ module.exports = {
                 )
                 .setFooter({ text: `Joining ${botIdent().activeBot.communityName} Private Group`, iconURL: botIdent().activeBot.icon });
             if (rulesChannelId) { 
-                returnEmbed.addFields({ name: "Rules:", value: `Please read the Private Group Rules before joining: <#${rulesChannelId}>`, inline: false })
+                returnEmbed.addFields({ name: "Rules:", value: `Please read the Private Group Rules before joining: <#${rulesChannelId.id}>`, inline: false })
             }
             interaction.reply({ embeds: [returnEmbed] })
         }
