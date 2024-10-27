@@ -715,15 +715,11 @@ module.exports = {
                             .setAuthor(oldEmbedSchema.author)
                             .setThumbnail(botIdent().activeBot.icon)
                             oldEmbedSchema.fields.forEach((i,index) => {
-                            if (i.name == "Mission Statement") { 
-                                newEmbed.addFields(
-                                    { name: i.name, value: `${i.value} ${thread.url}`, inline: i.inline}
-                                )
-                            }
-                            else {
                                 newEmbed.addFields({ name: i.name, value: i.value, inline: i.inline })
-                            }
-                        })
+                            })
+                            newEmbed.addFields(
+                                { name: `Mission Communications Thread`, value: `${thread.url}`, inline: false }
+                            )
                         await approved_embed.edit( { embeds: [newEmbed] } )
                         let new_values = [
                             timeSlot,
