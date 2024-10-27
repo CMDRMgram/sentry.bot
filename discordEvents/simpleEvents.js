@@ -1,13 +1,12 @@
 const { botLog, botIdent, getRankEmoji, hasSpecifiedRole } = require('../functions')
 const Discord = require('discord.js')
-
 const database = require(`../${botIdent().activeBot.botName}/db/database`)
 const config = require('../config.json')
 
 
+//xsf stuff
 let saveBulkMessages
 let removeBulkMessages
-
 let knowledge_proficiency_vars = {
     leadership_embedChannel: null,
     requestor_embedChannel: null,
@@ -51,7 +50,7 @@ if (botIdent().activeBot.botName == "GuardianAI") {
         knowledge_proficiency_vars.allRanks = config[botIdent().activeBot.botName].general_stuff.allRanks.map(i => i.rank_name)
     }
 }
-
+//
 
 const exp = {
     [Discord.Events.MessageReactionAdd]: async (reaction, user) => {
