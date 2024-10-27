@@ -4,47 +4,51 @@ const Discord = require('discord.js')
 const database = require(`../${botIdent().activeBot.botName}/db/database`)
 const config = require('../config.json')
 
-let leadership_embedChannel = null
-let requestor_embedChannel = null
-let generalstaff = null
-let colonel = null
-let major = null
-let captain = null
-let knowledge_proficiency = []
-let graderRank = []
+
 let saveBulkMessages
 let removeBulkMessages
-let promoter_rank
-let final_comments_required = 2
-let allRanks = null
+
+let knowledge_proficiency_vars = {
+    leadership_embedChannel: null,
+    requestor_embedChannel: null,
+    generalstaff: null,
+    colonel: null,
+    major: null,
+    captain: null,
+    knowledge_proficiency: [],
+    graderRank: [],
+    promoter_rank: null,
+    final_comments_required: 2,
+    allRanks: null,
+}
 if (botIdent().activeBot.botName == "GuardianAI") {
     ({ saveBulkMessages, removeBulkMessages } = require('../commands/GuardianAI/promotionRequest/prFunctions'))
     if (process.env.MODE != "PROD") {
         console.log("[CAUTION]".bgYellow, "knowledge proficiency embed channel required. Check config.json file. guardianai.general_stuff.knowledge_proficiency. Using testServer input if available")
-        leadership_embedChannel = config[botIdent().activeBot.botName].general_stuff.testServer.knowledge_proficiency.leadership_embedChannel
-        requestor_embedChannel = config[botIdent().activeBot.botName].general_stuff.testServer.knowledge_proficiency.requestor_embedChannel
-        knowledge_proficiency = Object.values(config[botIdent().activeBot.botName].general_stuff.testServer.knowledge_proficiency).map(i=>i)
-        generalstaff = config[botIdent().activeBot.botName].general_stuff.testServer.allRanks_testServer.find(r=>r.rank_name === 'General Staff').id
-        colonel = config[botIdent().activeBot.botName].general_stuff.testServer.allRanks_testServer.find(r=>r.rank_name === 'Colonel').id
-        major = config[botIdent().activeBot.botName].general_stuff.testServer.allRanks_testServer.find(r=>r.rank_name === 'Major').id
-        captain = config[botIdent().activeBot.botName].general_stuff.testServer.allRanks_testServer.find(r=>r.rank_name === 'Captain').id
-        graderRank.push({"General Staff":generalstaff,"Colonel":colonel,"Major":major,"Captain":captain})
-        final_comments_required = config[botIdent().activeBot.botName].general_stuff.testServer.knowledge_proficiency.final_comments_required
-        promoter_rank = config[botIdent().activeBot.botName].general_stuff.testServer.knowledge_proficiency.promoter_rank
-        allRanks = config[botIdent().activeBot.botName].general_stuff.testServer.allRanks_testServer.map(i => i.rank_name)
+        knowledge_proficiency_vars.leadership_embedChannel = config[botIdent().activeBot.botName].general_stuff.testServer.knowledge_proficiency.leadership_embedChannel
+        knowledge_proficiency_vars.requestor_embedChannel = config[botIdent().activeBot.botName].general_stuff.testServer.knowledge_proficiency.requestor_embedChannel
+        knowledge_proficiency_vars.knowledge_proficiency = Object.values(config[botIdent().activeBot.botName].general_stuff.testServer.knowledge_proficiency).map(i=>i)
+        knowledge_proficiency_vars.generalstaff = config[botIdent().activeBot.botName].general_stuff.testServer.allRanks_testServer.find(r=>r.rank_name === 'General Staff').id
+        knowledge_proficiency_vars.colonel = config[botIdent().activeBot.botName].general_stuff.testServer.allRanks_testServer.find(r=>r.rank_name === 'Colonel').id
+        knowledge_proficiency_vars.major = config[botIdent().activeBot.botName].general_stuff.testServer.allRanks_testServer.find(r=>r.rank_name === 'Major').id
+        knowledge_proficiency_vars.captain = config[botIdent().activeBot.botName].general_stuff.testServer.allRanks_testServer.find(r=>r.rank_name === 'Captain').id
+        knowledge_proficiency_vars.graderRank.push({"General Staff":knowledge_proficiency_vars.generalstaff,"Colonel":knowledge_proficiency_vars.colonel,"Major":knowledge_proficiency_vars.major,"Captain":knowledge_proficiency_vars.captain})
+        knowledge_proficiency_vars.final_comments_required = config[botIdent().activeBot.botName].general_stuff.testServer.knowledge_proficiency.final_comments_required
+        knowledge_proficiency_vars.promoter_rank = config[botIdent().activeBot.botName].general_stuff.testServer.knowledge_proficiency.promoter_rank
+        knowledge_proficiency_vars.allRanks = config[botIdent().activeBot.botName].general_stuff.testServer.allRanks_testServer.map(i => i.rank_name)
     }
     else { 
-        leadership_embedChannel = config[botIdent().activeBot.botName].general_stuff.knowledge_proficiency.leadership_embedChannel
-        requestor_embedChannel = config[botIdent().activeBot.botName].general_stuff.knowledge_proficiency.requestor_embedChannel
-        knowledge_proficiency = Object.values(config[botIdent().activeBot.botName].general_stuff.knowledge_proficiency).map(i=>i)
-        generalstaff = config[botIdent().activeBot.botName].general_stuff.allRanks.find(r=>r.rank_name === 'General Staff').id
-        colonel = config[botIdent().activeBot.botName].general_stuff.allRanks.find(r=>r.rank_name === 'Colonel').id
-        major = config[botIdent().activeBot.botName].general_stuff.allRanks.find(r=>r.rank_name === 'Major').id
-        captain = config[botIdent().activeBot.botName].general_stuff.allRanks.find(r=>r.rank_name === 'Captain').id
-        graderRank.push({"General Staff":generalstaff,"Colonel":colonel,"Major":major,"Captain":captain})
-        final_comments_required = config[botIdent().activeBot.botName].general_stuff.knowledge_proficiency.final_comments_required
-        promoter_rank = config[botIdent().activeBot.botName].general_stuff.knowledge_proficiency.promoter_rank
-        allRanks = config[botIdent().activeBot.botName].general_stuff.allRanks.map(i => i.rank_name)
+        knowledge_proficiency_vars.leadership_embedChannel = config[botIdent().activeBot.botName].general_stuff.knowledge_proficiency.leadership_embedChannel
+        knowledge_proficiency_vars.requestor_embedChannel = config[botIdent().activeBot.botName].general_stuff.knowledge_proficiency.requestor_embedChannel
+        knowledge_proficiency_vars.knowledge_proficiency = Object.values(config[botIdent().activeBot.botName].general_stuff.knowledge_proficiency).map(i=>i)
+        knowledge_proficiency_vars.generalstaff = config[botIdent().activeBot.botName].general_stuff.allRanks.find(r=>r.rank_name === 'General Staff').id
+        knowledge_proficiency_vars.colonel = config[botIdent().activeBot.botName].general_stuff.allRanks.find(r=>r.rank_name === 'Colonel').id
+        knowledge_proficiency_vars.major = config[botIdent().activeBot.botName].general_stuff.allRanks.find(r=>r.rank_name === 'Major').id
+        knowledge_proficiency_vars.captain = config[botIdent().activeBot.botName].general_stuff.allRanks.find(r=>r.rank_name === 'Captain').id
+        knowledge_proficiency_vars.graderRank.push({"General Staff":knowledge_proficiency_vars.generalstaff,"Colonel":knowledge_proficiency_vars.colonel,"Major":knowledge_proficiency_vars.major,"Captain":knowledge_proficiency_vars.captain})
+        knowledge_proficiency_vars.final_comments_required = config[botIdent().activeBot.botName].general_stuff.knowledge_proficiency.final_comments_required
+        knowledge_proficiency_vars.promoter_rank = config[botIdent().activeBot.botName].general_stuff.knowledge_proficiency.promoter_rank
+        knowledge_proficiency_vars.allRanks = config[botIdent().activeBot.botName].general_stuff.allRanks.map(i => i.rank_name)
     }
 }
 
@@ -225,7 +229,7 @@ const exp = {
     messageCreate: async (message, bot) => {
         if (botIdent().activeBot.botName == 'GuardianAI' && !message.author.bot) {
             let messageParent = message.channel.parentId
-            if (messageParent == requestor_embedChannel || messageParent == leadership_embedChannel) {
+            if (messageParent == knowledge_proficiency_vars.requestor_embedChannel || messageParent == knowledge_proficiency_vars.leadership_embedChannel) {
                 // const embedChannelObj = await message.guild.channels.fetch(applyForRanks_guardianai)
                 if (message.channel.name.includes("Submission")) {
                     // console.log("submitting")
@@ -318,7 +322,7 @@ const exp = {
                                 await leadership_challenge.edit( { embeds: [requestor_newEmbed], components: [row] } )
                                 await requestor_challenge.edit( { embeds: [requestor_newEmbed], components: [] } )
                                 await requestor_thread.setLocked(true)
-                                const blkMsg = await leadership_thread.send(`🕗<@&${graderRank[0][grader_ident]}> AXI Progression Challenge Proof Review Required`)
+                                const blkMsg = await leadership_thread.send(`🕗<@&${knowledge_proficiency_vars.graderRank[0][grader_ident]}> AXI Progression Challenge Proof Review Required`)
                                 bulkMessages.push({ message: blkMsg.id, thread: leadership_thread.id })
                                 saveBulkMessages(message.author.id,bulkMessages)
                                 return
@@ -349,7 +353,7 @@ const exp = {
                                 await leadership_challenge.edit( { embeds: [leadership_newEmbed], components: [row] } )
                                 await requestor_challenge.edit( { embeds: [requestor_newEmbed], components: [] } )
                                 await requestor_thread.setLocked(true)
-                                const blkMsg = await leadership_thread.send(`🕗<@&${graderRank[0][grader_ident]}> AXI Progression Challenge Proof Review Required`)
+                                const blkMsg = await leadership_thread.send(`🕗<@&${knowledge_proficiency_vars.graderRank[0][grader_ident]}> AXI Progression Challenge Proof Review Required`)
                                 bulkMessages.push({ message: blkMsg.id, thread: leadership_thread.id })
                                 saveBulkMessages(message.author.id,bulkMessages)
                                 return
@@ -409,13 +413,13 @@ const exp = {
                                     if (attachment.contentType && attachment.contentType.startsWith('image/')) {
                                       newEmbed.addFields(
                                           { name: "Promotion Challenge Proof", value: attachment.url, inline: false },
-                                          { name: "Required Approval by:", value: `<@&${graderRank[0][grader_ident]}> or Higher`, inline: false }
+                                          { name: "Required Approval by:", value: `<@&${knowledge_proficiency_vars.graderRank[0][grader_ident]}> or Higher`, inline: false }
                                       )
                                     }
                                 })
                                 await leadership_challenge.edit( { embeds: [newEmbed], components: [row] } )
                                 await requestor_challenge.edit( { embeds: [newEmbed] } )
-                                const blkMsg = await leadership_thread.send(`🕗<@&${graderRank[0][grader_ident]}> Promotion Challenge Proof Review Required`)
+                                const blkMsg = await leadership_thread.send(`🕗<@&${knowledge_proficiency_vars.graderRank[0][grader_ident]}> Promotion Challenge Proof Review Required`)
                                 bulkMessages.push({ message: blkMsg.id, thread: leadership_thread.id })
                                 saveBulkMessages(message.author.id,bulkMessages)
                                 return
@@ -435,12 +439,12 @@ const exp = {
                                 urls = urls.map(i => i + "\n")
                                 newEmbed.addFields(
                                     { name: "Promotion Challenge Proof", value: `${urls}`, inline: false },
-                                    { name: "Required Approval by:", value: `<@&${graderRank[0][grader_ident]}> or Higher`, inline: false }
+                                    { name: "Required Approval by:", value: `<@&${knowledge_proficiency_vars.graderRank[0][grader_ident]}> or Higher`, inline: false }
                                 )
                                 // message.delete()
                                 await leadership_challenge.edit( { embeds: [newEmbed], components: [row] } )
                                 await requestor_challenge.edit( { embeds: [newEmbed] } )
-                                const blkMsg = await leadership_thread.send(`🕗<@&${graderRank[0][grader_ident]}> Promotion Challenge Proof Review Required`)
+                                const blkMsg = await leadership_thread.send(`🕗<@&${knowledge_proficiency_vars.graderRank[0][grader_ident]}> Promotion Challenge Proof Review Required`)
                                 bulkMessages.push({ message: blkMsg.id, thread: leadership_thread.id })
                                 saveBulkMessages(message.author.id,bulkMessages)
                                 await requestor_thread.setLocked(true)
@@ -662,17 +666,17 @@ const exp = {
                             });
                             totalFields++
                         }
-                        if (totalFields >= (Number(final_comments_required) + 3)) {
+                        if (totalFields >= (Number(knowledge_proficiency_vars.final_comments_required) + 3)) {
                             const requestor_components = new Discord.ActionRowBuilder()
                                 .addComponents(
                                     new Discord.ButtonBuilder()
-                                        .setCustomId(`promotion-approve-${promotion.userId}-${promoter_rank}`)
+                                        .setCustomId(`promotion-approve-${promotion.userId}-${knowledge_proficiency_vars.promoter_rank}`)
                                         .setLabel("Approve Promotion")
                                         .setStyle(Discord.ButtonStyle.Success)
                                 )
                                 .addComponents(
                                     new Discord.ButtonBuilder()
-                                        .setCustomId(`promotion-deny-${promotion.userId}-${promoter_rank}`)
+                                        .setCustomId(`promotion-deny-${promotion.userId}-${knowledge_proficiency_vars.promoter_rank}`)
                                         .setLabel("Deny Promotion")
                                         .setStyle(Discord.ButtonStyle.Danger)
                                 )
@@ -890,7 +894,7 @@ const exp = {
         }
     },
     messageDelete: async (message) => {
-        if (!message.author.bot && !knowledge_proficiency.includes(message.channel.parentId) ) {  
+        if (!message.author.bot && !knowledge_proficiency_vars.knowledge_proficiency.includes(message.channel.parentId) ) {  
             try {
                 botLog(message.guild,new Discord.EmbedBuilder().setDescription(`Message deleted by user: ${message.author}` + '```' + `${message.content}` + '```').setTitle(`Message Deleted 🗑️`),1)
             } 
