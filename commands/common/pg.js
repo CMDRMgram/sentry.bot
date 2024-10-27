@@ -30,6 +30,7 @@ module.exports = {
                 )
                 .setFooter({ text: `Joining ${botIdent().activeBot.communityName} Private Group`, iconURL: botIdent().activeBot.icon });
             if (rulesChannelId) { 
+                console.log(rulesChannelId)
                 returnEmbed.addFields({ name: "Rules:", value: `Please read the Private Group Rules before joining: <#${rulesChannelId.id}>`, inline: false })
             }
             interaction.reply({ embeds: [returnEmbed] })
