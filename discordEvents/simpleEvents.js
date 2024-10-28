@@ -895,7 +895,7 @@ const exp = {
     messageDelete: async (message) => {
         console.log(message.author)
         if (
-            !message.author.bot 
+            !message?.author?.bot 
             && !knowledge_proficiency_vars.knowledge_proficiency.includes(message.channel.parentId)
         ) {  
             try {
