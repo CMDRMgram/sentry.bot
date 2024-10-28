@@ -893,7 +893,11 @@ const exp = {
         }
     },
     messageDelete: async (message) => {
-        if (!message.author.bot && !knowledge_proficiency_vars.knowledge_proficiency.includes(message.channel.parentId) ) {  
+        console.log(message.author)
+        if (
+            !message.author.bot 
+            && !knowledge_proficiency_vars.knowledge_proficiency.includes(message.channel.parentId)
+        ) {  
             try {
                 botLog(message.guild,new Discord.EmbedBuilder().setDescription(`Message deleted by user: ${message.author}` + '```' + `${message.content}` + '```').setTitle(`Message Deleted 🗑️`),1)
             } 
