@@ -120,7 +120,6 @@ function mainOperation(){
 			if (process.env.MODE == "PROD") {
 				//Assigns the ActivityType (status) of the bot with the system name.
 				carrierJumpRedisplay()
-				// knowledgeTestEmbeds()
 				async function carrierJumpRedisplay() {
 					const currentSystem_sql = 'SELECT starSystem FROM `carrier_jump` ORDER BY id DESC LIMIT 1';
 					const currentSystem_response = await guardianai_vars.query(currentSystem_sql)
@@ -135,7 +134,6 @@ function mainOperation(){
 		if (botFunc.botIdent().activeBot.botName == 'Warden') {
 			const database = await require(`./${botFunc.botIdent().activeBot.botName}/db/database`)
 			warden_vars = database
-
 
 			// Scheduled Role Backup Task
 			if(process.env.MODE == "PROD") {
@@ -263,8 +261,8 @@ function mainOperation(){
 		const dateTime = botFunc.generateDateTime();
 		console.log('[ERROR]'.red,`${dateTime} ⛔ Unhandled Exception:`,err.stack)
 		botFunc.botLog(guild,new Discord.EmbedBuilder()
-			.setDescription('```' + err.stack + '```')
 			.setTitle(`⛔ Fatal error experienced`)
+			.setDescription('```' + err.stack + '```')
 			,2
 			,'error'
 		)
