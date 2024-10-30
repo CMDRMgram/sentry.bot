@@ -13,3 +13,5 @@ package copy.json
 GuardianAI/prisma
 package-lock.json
 GuardianAI/bookofsentinel
+tmp/memberlist.csv
+tmp/memberlist.txt
