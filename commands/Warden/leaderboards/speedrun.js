@@ -91,30 +91,41 @@ module.exports = {
 			const sql = 'SELECT * FROM `speedrun` WHERE user_id = (?) AND variant = (?) AND class = (?)';
 			const response = await database.query(sql, values)
 			if (response.length > 0) {
-				response.forEach(item => {
+				const foundFasterEntry = response.some(item => {
 					let db_timeStuff = {
 						seconds: Number(item.time),
 						milliseconds: Number(item.milliseconds)
 					}
-					if (Number(db_timeStuff.seconds + db_timeStuff.milliseconds) <= Number(timeStuff.seconds + timeStuff.milliseconds)) {
+				
+					function timeFunc(sec, ms) {
+						const seconds = Number(sec)
+						const milliseconds = Number(ms)
+						return `${seconds}.${milliseconds.toString().padStart(3, '0')}`
+					}
+				
+					if (timeFunc(db_timeStuff.seconds, db_timeStuff.milliseconds) <= timeFunc(timeStuff.seconds, timeStuff.milliseconds)) {
 						const abortEmbed = new Discord.EmbedBuilder()
 							.setColor('#f20505')
 							.setTitle(`**Speedrun Submission Aborted**`)
 							.setDescription(`You have a previous entry of **${args.shipclass.toUpperCase()}** **${args.variant.toUpperCase()}** which is faster than or equal to this entry. Submission aborted.`)
 							.addFields(
-							{name: "Your Previous Entry:", value: `${db_timeStuff.seconds}.${db_timeStuff.milliseconds}`, inline: false},
-							{name: "Your Submitted Entry", value: "==============================================================", inline: false},
-							{name: "Pilot", value: `<@${user}>`, inline: true},
-							{name: "Ship", value: `${args.ship}`, inline: true},
-							{name: "Variant", value: `${args.variant}`, inline: true},
-							{name: "Time Series", value: `${timeString}`, inline: true},
-							{name: "Time Seconds.Milliseconds", value: `${Number(timeStuff.seconds + timeStuff.milliseconds)}`, inline: true},
-							{name: "Class", value: `${args.shipclass}`, inline: true}
-						)
-						return interaction.editReply({ embeds: [abortEmbed] })
+								{ name: "Your Previous Entry:", value: `${db_timeStuff.seconds}.${db_timeStuff.milliseconds}`, inline: false },
+								{ name: "Your Submitted Entry", value: "==============================================================", inline: false },
+								{ name: "Pilot", value: `<@${user}>`, inline: true },
+								{ name: "Ship", value: `${args.ship}`, inline: true },
+								{ name: "Variant", value: `${args.variant}`, inline: true },
+								{ name: "Time Series", value: `${timeString}`, inline: true },
+								{ name: "Time Seconds.Milliseconds", value: `${timeStuff.seconds}.${timeStuff.milliseconds}`, inline: true },
+								{ name: "Class", value: `${args.shipclass}`, inline: true }
+							)
+				
+						interaction.editReply({ embeds: [abortEmbed] })
+						return true // Stops the loop early
 					}
+				
+					return false // Continue looping if condition is not met
 				})
-				return
+				if (foundFasterEntry) return
 			}
 			else {
 				try {
