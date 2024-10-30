@@ -91,28 +91,30 @@ module.exports = {
 			const sql = 'SELECT * FROM `speedrun` WHERE user_id = (?) AND variant = (?) AND class = (?)';
 			const response = await database.query(sql, values)
 			if (response.length > 0) {
-				let db_timeStuff = {
-					seconds: Number(response[0].time),
-					milliseconds: Number(response[0].milliseconds)
-				}
-				if (Number(db_timeStuff.seconds + db_timeStuff.milliseconds) <= Number(timeStuff.seconds + timeStuff.milliseconds)) {
-					const abortEmbed = new Discord.EmbedBuilder()
-						.setColor('#f20505')
-						.setTitle(`**Speedrun Submission Aborted**`)
-						.setDescription(`You have a previous entry of **${args.shipclass.toUpperCase()}** **${args.variant.toUpperCase()}** which is faster than or equal to this entry. Submission aborted.`)
-						.addFields(
-						{name: "Your Current Entry:", value: "See Below", inline: false},
-						{name: "Pilot", value: `<@${user}>`, inline: true},
-						{name: "Ship", value: `${args.ship}`, inline: true},
-						{name: "Variant", value: `${args.variant}`, inline: true},
-						{name: "Time", value: `${timeString}`, inline: true},
-						{name: "Class", value: `${args.shipclass}`, inline: true},
-						{name: "link", value: `${args.link}`, inline: true},
-						{name: "Comments", value: `${args.comments}`, inline: true})
-					return interaction.editReply({ embeds: [abortEmbed] })
-
-					// return interaction.editReply({ content: `You have a previous entry of **${args.shipclass.toUpperCase()}** **${args.variant.toUpperCase()}** which is faster than or equal to this entry. Submission aborted.` })
-				}
+				response.forEach(item => {
+					let db_timeStuff = {
+						seconds: Number(item.time),
+						milliseconds: Number(item.milliseconds)
+					}
+					if (Number(db_timeStuff.seconds + db_timeStuff.milliseconds) <= Number(timeStuff.seconds + timeStuff.milliseconds)) {
+						const abortEmbed = new Discord.EmbedBuilder()
+							.setColor('#f20505')
+							.setTitle(`**Speedrun Submission Aborted**`)
+							.setDescription(`You have a previous entry of **${args.shipclass.toUpperCase()}** **${args.variant.toUpperCase()}** which is faster than or equal to this entry. Submission aborted.`)
+							.addFields(
+							{name: "Your Previous Entry:", value: `${db_timeStuff.seconds}.${db_timeStuff.milliseconds}`, inline: false},
+							{name: "Your Submitted Entry", value: "==============================================================", inline: false},
+							{name: "Pilot", value: `<@${user}>`, inline: true},
+							{name: "Ship", value: `${args.ship}`, inline: true},
+							{name: "Variant", value: `${args.variant}`, inline: true},
+							{name: "Time Series", value: `${timeString}`, inline: true},
+							{name: "Time Seconds.Milliseconds", value: `${Number(timeStuff.seconds + timeStuff.milliseconds)}`, inline: true},
+							{name: "Class", value: `${args.shipclass}`, inline: true}
+						)
+						return interaction.editReply({ embeds: [abortEmbed] })
+					}
+				})
+				return
 			}
 			else {
 				try {
