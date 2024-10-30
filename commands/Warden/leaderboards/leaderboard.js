@@ -117,6 +117,7 @@ data: new Discord.SlashCommandBuilder()
 										**Pilot:** ${i.CDMR != undefined ? i.CDMR : i.CMDR }\r
 										**Ship:**  ${i.ship}\r
 										**Time:** ${i.hours}h ${i.minutes}m ${i.seconds}s ${i.milliseconds}ms\r
+										**Seconds.Milliseconds:** ${i.time}.${i.milliseconds}\r
 										**Date:** ${i.submission_date}\r
 										**Link:** ${i.link}
 									`, inine: false 
