@@ -96,7 +96,22 @@ module.exports = {
 					milliseconds: Number(response[0].milliseconds)
 				}
 				if (Number(db_timeStuff.seconds + db_timeStuff.milliseconds) <= Number(timeStuff.seconds + timeStuff.milliseconds)) {
-					return interaction.editReply({ content: `You have a previous entry of **${args.shipclass.toUpperCase()}** **${args.variant.toUpperCase()}** which is faster than or equal to this entry. Submission aborted.` })
+					const abortEmbed = new Discord.EmbedBuilder()
+						.setColor('#f20505')
+						.setTitle(`**Speedrun Submission Aborted**`)
+						.setDescription(`You have a previous entry of **${args.shipclass.toUpperCase()}** **${args.variant.toUpperCase()}** which is faster than or equal to this entry. Submission aborted.`)
+						.addFields(
+						{name: "Your Current Entry:", value: "See Below", inline: false},
+						{name: "Pilot", value: `<@${user}>`, inline: true},
+						{name: "Ship", value: `${args.ship}`, inline: true},
+						{name: "Variant", value: `${args.variant}`, inline: true},
+						{name: "Time", value: `${timeString}`, inline: true},
+						{name: "Class", value: `${args.shipclass}`, inline: true},
+						{name: "link", value: `${args.link}`, inline: true},
+						{name: "Comments", value: `${args.comments}`, inline: true})
+					return interaction.editReply({ embeds: [abortEmbed] })
+
+					// return interaction.editReply({ content: `You have a previous entry of **${args.shipclass.toUpperCase()}** **${args.variant.toUpperCase()}** which is faster than or equal to this entry. Submission aborted.` })
 				}
 			}
 			else {
