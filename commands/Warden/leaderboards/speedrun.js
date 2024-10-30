@@ -87,6 +87,7 @@ module.exports = {
 		const timeString = date.toISOString().substr(11, 8) + '.' + String(timeStuff.milliseconds).padStart(3, '0')
 
 		try {
+			// user = '677514454262480896'
 			const values = [user,args.variant,args.shipclass]
 			const sql = 'SELECT * FROM `speedrun` WHERE user_id = (?) AND variant = (?) AND class = (?)';
 			const response = await database.query(sql, values)
@@ -118,21 +119,22 @@ module.exports = {
 								{ name: "Time Seconds.Milliseconds", value: `${timeStuff.seconds}.${timeStuff.milliseconds}`, inline: true },
 								{ name: "Class", value: `${args.shipclass}`, inline: true }
 							)
-				
+
 						interaction.editReply({ embeds: [abortEmbed] })
 						return true // Stops the loop early
 					}
-				
 					return false // Continue looping if condition is not met
 				})
 				if (foundFasterEntry) return
+				// console.log("GOGO")
 			}
-			else {
+			// else {
 				try {
 					const submission_values = [user,name,timeStuff.seconds,args.shipclass,args.ship,args.variant,args.link,false,timestamp,args.comments,timeStuff.milliseconds]
 					const submission_sql = `
 						INSERT INTO speedrun (user_id,name,time,class,ship,variant,link,approval,date,comments,milliseconds) VALUES (?,?,?,?,?,?,?,?,?,?,?);
 					`;
+					// console.log("ADD ENTRY".yellow)
 					await database.query(submission_sql, submission_values)
 				} 
 				catch (err) {
@@ -145,7 +147,7 @@ module.exports = {
 					)
 					return interaction.editReply({ content: `Something went wrong creating a Submission, please try again or contact staff!` })
 				}
-			}
+			// }
 		}
 		catch (err) {
 			console.log(err)
