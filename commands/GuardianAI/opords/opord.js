@@ -318,9 +318,9 @@ module.exports = {
                                 newEmbed.addFields({ name: field.name, value: field.value, inline: field.inline })
                             }
                         })
-                        if (oldEmbedSchema.fields.length === 11) {
+                        if (oldEmbedSchema.fields.length === 12) {
                             newEmbed.addFields(
-                                { name: "Experience Credit:", value: "If you feel an error in experience credit, please contact General Staff", inline: false },
+                                { name: "Experience Credit:", value: "If you feel an error in experience credit, please contact the Captain that was in charge and if that cant be resolved, contact a Major.", inline: false },
                                 { name: "Earned Experience Credit:", value: participant_uniform, inline: false },
                                 { name: "Participated:", value: participant_players, inline: false }
                             )
