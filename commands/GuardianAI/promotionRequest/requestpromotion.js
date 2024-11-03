@@ -1101,6 +1101,9 @@ module.exports = {
                         })
                     }
                 })
+                if (ranks.length === 0) { 
+                    return [{ Learner: 0}]
+                }
                 let listRanks = config[botIdent().activeBot.botName].general_stuff.allRanks
                 if (!listRanks) { 
                     listRanks = config[botIdent().activeBot.botName].general_stuff.testServer.allRanks_testServer
