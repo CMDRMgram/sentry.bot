@@ -28,13 +28,13 @@ module.exports = {
             .setRequired(true)
             .addChoices(
                 {name: `Default: ${date.toLocaleString('en-US', { timeZone: 'UTC', ...timeGen.default })}`, value: 'a'},
+                {name: `Relative Time: ${timeGen.relativeTime}`, value: 'R'},
                 {name: `Short Time: ${date.toLocaleString('en-US', { timeZone: 'UTC', ...timeGen.shortTime })}`, value: 't'},
                 {name: `Long Time: ${date.toLocaleString('en-US', { timeZone: 'UTC', ...timeGen.longTime })}`, value: 'T'},
                 {name: `Short Date: ${date.toLocaleString('en-US', { timeZone: 'UTC', ...timeGen.shortDate })}`, value: 'd'},
                 {name: `Long Date: ${date.toLocaleString('en-US', { timeZone: 'UTC', ...timeGen.longDate })}`, value: 'D'},
                 {name: `Short Date/Time: ${date.toLocaleString('en-US', { timeZone: 'UTC', ...timeGen.shotDateTime })}`, value: 'f'},
                 {name: `Long Date/Time: ${date.toLocaleString('en-US', { timeZone: 'UTC', ...timeGen.longDateTime })}`, value: 'F'},
-                {name: `Relative Time: ${timeGen.relativeTime}`, value: 'R'}
             )
         )
     .addNumberOption(option => 
@@ -62,7 +62,7 @@ module.exports = {
             .setColor('#00FFFF') //bright cyan
             .setDescription('Created a discord timestamp from your chosen local time.')
             .addFields(
-                {name: 'Your local time input:', value: timeValue, inline: true},
+                {name: 'Your local time input:', value: "```"+timeValue+"```", inline: true},
                 {name: 'Your local time visual', value: time, inline: true},
                 {name: 'Code to paste somewhere', value: time_unformatted, inline: false},
             )
