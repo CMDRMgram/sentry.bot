@@ -1139,6 +1139,8 @@ module.exports = {
                     rank = await getName(response,promotion.requestor.id)
                 }
                 else {
+                    // rank = await getName(response,promotion.requestor.id)
+                    // console.log("RANK INFO:",rank)
                     rank = [
                         { [`${promotion.requestor_currentRank}`]: 5 }
                     ]

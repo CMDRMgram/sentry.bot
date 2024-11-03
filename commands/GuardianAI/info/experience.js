@@ -227,7 +227,6 @@ module.exports = {
                         // const multi2 = JSON.parse(`[${i.opord_number}]`);
                         // console.log(multi2)
                         const multi = JSON.parse(`[${i.participant_uniform}]`);
-                        // console.log(multi)
                         multi.forEach(single => {
                             if (single.userId == inputName.userId) {
                                 if (!ranks.find(i=>i[single.rank])) {
@@ -241,6 +240,9 @@ module.exports = {
                         })
                     }
                 })
+                if (ranks.length === 0) { 
+                    return [{ Learner: 0}]
+                }
                 let listRanks = config[botIdent().activeBot.botName].general_stuff.allRanks
                 if (!listRanks) { 
                     listRanks = config[botIdent().activeBot.botName].general_stuff.testServer.allRanks_testServer
