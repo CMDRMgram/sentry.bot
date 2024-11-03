@@ -40,8 +40,8 @@ module.exports = {
             "advanced": "Lieutenant",
             "master": "Captain",
         }
-        let promotion = null
         let bulkMessages = []
+        let promotion = null
         try { //Get DB info of thread
             const values = [requestor.id]
             const sql = 'SELECT * FROM `promotion` WHERE userId = (?)'

@@ -100,6 +100,11 @@ module.exports = {
                         .setRequired(true)
                 )
         )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('interested')
+                .setDescription('Send a message to those interested in this opord')
+        )
     ,
     async autocomplete(interaction) {
         fillVoiceChan(interaction)
@@ -115,6 +120,33 @@ module.exports = {
     },
     permissions: 0,
     async execute(interaction) {
+        if (interaction.options.getSubcommand() === 'interested') {
+            // await interaction.deferReply({ ephemeral: true });
+            const opordParentId = process.env.MODE != "testserver"
+                ? config[botIdent().activeBot.botName].operation_order.opord_thread_parentId
+                : config[botIdent().activeBot.botName].general_stuff.testServer.operation_order.opord_thread_parentId
+            let messageParent = interaction.channel.parentId
+            if (messageParent != opordParentId) {
+                return await interaction.reply({ content: `This command must be typed in an opord thread`, ephemeral: true })
+            }
+            const approvalRanks = process.env.MODE != 'testserver' 
+                ? config[botIdent().activeBot.botName].operation_order.opord_interested_approval
+                : config[botIdent().activeBot.botName].general_stuff.testServer.operation_order.opord_interested_approval
+            
+            const approvalRanks_string = approvalRanks.map(rank => rank.rank_name).join(', ').replace(/,([^,]*)$/, ', or$1');
+            const member = interaction.member;
+            if (hasSpecifiedRole(member, approvalRanks) == 0) {
+                botLog(interaction.guild,new Discord.EmbedBuilder()
+                .setDescription(`${interaction.member.nickname} does not have access. Requires ${approvalRanks_string}`)
+                .setTitle(`/opord ${interaction.options.getSubcommand()}`)
+                ,2
+                )
+                await interaction.editReply({ content: `You do not have the roles to notify interested members of this oporder. Contact ${approvalRanks_string}`, ephemeral: true });
+                return
+            }
+            
+
+        }
         if (interaction.options.getSubcommand() === 'participants') {
             //Start
             await interaction.deferReply({ ephemeral: true });

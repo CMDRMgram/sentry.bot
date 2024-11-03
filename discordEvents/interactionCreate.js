@@ -16,7 +16,7 @@ function postArgs(interaction) {
     }
     return args
 }
-async function modalStuff(i) {
+async function activeDutyModal(i) {
     const fields = {
         title: new Discord.TextInputBuilder()
             .setCustomId(`title`)
@@ -53,6 +53,43 @@ async function modalStuff(i) {
 
     }
 }
+async function opordInterestedModal(i) {
+    const fields = {
+        title: new Discord.TextInputBuilder()
+            .setCustomId(`title`)
+            .setLabel(`Input a Title`)
+            .setStyle(Discord.TextInputStyle.Short)
+            .setRequired(true),
+            // .setPlaceholder(`Notification`),
+        message: new Discord.TextInputBuilder()
+            .setCustomId(`message`)
+            .setLabel(`Enter your notification message:`)
+            .setStyle(Discord.TextInputStyle.Paragraph)
+            .setRequired(true)
+            // .setPlaceholder(`1200`)
+    }
+    const modal = new Discord.ModalBuilder()
+        .setCustomId('interestedOpord')
+        .setTitle('Enter the Notification Inputs')
+        .addComponents(
+            new Discord.ActionRowBuilder().addComponents(fields.title),
+            new Discord.ActionRowBuilder().addComponents(fields.message),
+        )
+    await i.showModal(modal);
+    const submitted = await i.awaitModalSubmit({
+        time: 300000,
+    }).catch(error => {
+
+        console.error(error)
+        return null
+    })
+
+    if (submitted) {
+        const [title,message] = submitted.fields.fields.map(i => i.value)
+        return [submitted, title, message]
+
+    }
+}
 const exp = {
     interactionCreate: async (interaction,bot) => {
         //!isModalSubmit() is not 100% required, you can gather any modal replies from within the codebase your working from.
@@ -60,6 +97,46 @@ const exp = {
         //!   the interaction.commandName pathing. It is dealt with from the client code itself.
         if (interaction.isModalSubmit()) {
             if (botIdent().activeBot.botName == 'GuardianAI') {
+                if (interaction.customId.startsWith("interestedOpord")) {
+                    await interaction.deferReply({ ephemeral: true });
+                    let eventInfo = null
+                    try { //Get DB info of thread
+                        const values = [interaction.channel.id]
+                        const sql = 'SELECT event_id FROM `opord` WHERE threadId = (?)'
+                        const response = await database.query(sql,values)
+                        if (response.length > 0) {
+                            eventInfo = response[0]
+                        }
+                    }
+                    catch (err) {
+                        console.log(err)
+                        botLog(interaction.guild,new Discord.EmbedBuilder()
+                            .setDescription('```' + err.stack + '```')
+                            .setTitle(`⛔ Fatal error experienced`)
+                            ,2
+                            ,'error'
+                        )
+                    }
+                    const users = await interaction.guild.scheduledEvents.fetchSubscribers(eventInfo.event_id)
+                    const interestedUsers = users.map(eventUser => `<@${eventUser.user.id}>`).join(', ')
+                    await interaction.channel.send({ content: `${interestedUsers}` })
+                    
+                    const title = interaction.fields.getTextInputValue('title')
+                    const description = interaction.fields.getTextInputValue('message')
+                    const embed = new Discord.EmbedBuilder()
+                        .setTitle(`${title}`)
+                        .setDescription(`${description}`)
+                        .setColor('#00FFFF') //bright cyan
+                        // .setColor('#87FF2A') //bight green
+                        // .setColor('#f20505') //bight red 
+                        // .setColor('#f2ff00') //bight yellow
+                        .setAuthor({ name: interaction.member.displayName, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
+                        .setThumbnail(botIdent().activeBot.icon)
+                    await interaction.channel.send({ embeds: [embed] })
+                    await interaction.editReply({ content: `Message sent to ${interaction.channel.url}`, ephemeral: true });
+                    args = {}
+                    return
+                }
                 if (interaction.customId.startsWith("activeDuty")) {
                     await interaction.deferReply({ ephemeral: true });
                     const title = interaction.fields.getTextInputValue('title')
@@ -68,7 +145,8 @@ const exp = {
                     const embed = new Discord.EmbedBuilder()
                         .setTitle(`${title}`)
                         .setDescription(`${description}`)
-                        .setColor('#87FF2A') //bight green
+                        .setColor('#00FFFF') //bright cyan
+                        // .setColor('#87FF2A') //bight green
                         // .setColor('#f20505') //bight red 
                         // .setColor('#f2ff00') //bight yellow
                         .setAuthor({ name: interaction.member.displayName, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
@@ -125,7 +203,12 @@ const exp = {
             if (!command) return;
             if (interaction.commandName === 'active_duty') {
                 postArgs(interaction)
-                modalStuff(interaction)
+                activeDutyModal(interaction)
+            }
+            // console.log(interaction)
+            if (interaction.commandName === 'opord' && interaction.options.getSubcommand() === 'interested') {
+                postArgs(interaction)
+                opordInterestedModal(interaction)
             }
             try {
                 await command.execute(interaction)

@@ -146,6 +146,12 @@
                 { "rank_name": "Colonel", "id": "1176734917263102063"},
                 { "rank_name": "Major", "id": "1176734800103608461"}
             ],
+            "opord_interested_approval": [
+                { "rank_name": "General Staff", "id": "1173407686797303928"},
+                { "rank_name": "Colonel", "id": "1176734917263102063"},
+                { "rank_name": "Major", "id": "1176734800103608461"},
+                { "rank_name": "Captain", "id": "1176734589742481549"}
+            ],
             "opord_participant_approval": [
                 { "rank_name": "General Staff", "id": "1173407686797303928"},
                 { "rank_name": "Colonel", "id": "1176734917263102063"},
@@ -269,7 +275,13 @@
                 "operation_order": {
                     "opord_thread_parentId": "1201933711038496788",
                     "opord_channel_approved": "1201635383927132211",
-                    "opord_channel_await": "1201635444379619348"
+                    "opord_channel_await": "1201635444379619348",
+                    "opord_interested_approval": [
+                        { "rank_name": "General Staff", "id": "1173407686797303928" },
+                        { "rank_name": "Colonel", "id": "1176734917263102063" },
+                        { "rank_name": "Major", "id": "1176734800103608461" },
+                        { "rank_name": "Captain", "id": "1176734589742481549" }
+                    ]
                 },
                 "carrier_jump": [
                     { "rank_name": "General Staff", "id": "961718365603393576"},
