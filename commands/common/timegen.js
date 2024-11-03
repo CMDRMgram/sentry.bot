@@ -49,10 +49,23 @@ module.exports = {
     )
     ,
     async execute(interaction) {
-        await interaction.deferReply({ ephemeral: false })
+        const ephem = process.env.MODE == "PROD" ? true : false
+        await interaction.deferReply({ ephemeral: ephem })
         let inputs = interaction.options._hoistedOptions
         let timeFormat = inputs.find(i => i.name === 'type').value
         let timeValue = inputs.find(i => i.name === 'datetime').value
+        function capitalizeFirstLetter(input) {
+            const parts = input.split(' ')
+            if (parts[0].match(/^[a-zA-Z]+$/) || parts[0].match(/^\d+\/[a-zA-Z]+$/)) {
+                const dayMonth = parts[0].split('/')
+                dayMonth[1] = dayMonth[1].charAt(0).toUpperCase() + dayMonth[1].slice(1)
+                parts[0] = dayMonth.join('/')
+            }
+        
+            // Join the parts back into a string
+            return parts.join(' ')
+        }
+        timeValue = capitalizeFirstLetter(timeValue)
         let timeZone = inputs.find(i => i.name === 'timezone').value
         const timestamp = eventTimeValidate(timeValue,timeZone,interaction)
         const time = timeFormat == 'a' ? `<t:${timestamp}>` : `<t:${timestamp}:${timeFormat}>`

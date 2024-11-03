@@ -306,7 +306,7 @@ const thisBotFunctions = {
                     }
                     const timeStr = parts[1]
                     if (!/^\d{4}$/.test(timeStr)) {
-                        errorList.push(`Invalid input: Time must be in HHMM format: ${timeStr}`)
+                        errorList.push(`Invalid input: Time must be in HHMM format`)
                         return errorList
                     }
                     const hourStr = timeStr.slice(0, 2)
