@@ -65,9 +65,9 @@ module.exports = {
             // Join the parts back into a string
             return parts.join(' ')
         }
-        timeValue = capitalizeFirstLetter(timeValue)
         let timeZone = inputs.find(i => i.name === 'timezone').value
         const timestamp = eventTimeValidate(timeValue,timeZone,interaction)
+        timeValue = capitalizeFirstLetter(timeValue)
         const time = timeFormat == 'a' ? `<t:${timestamp}>` : `<t:${timestamp}:${timeFormat}>`
         const time_unformatted = timeFormat == 'a' ? '```<t:' + timestamp + '>```' : '```<t:' + timestamp + ':' + timeFormat + '>```';
         const embed = new  Discord.EmbedBuilder()
