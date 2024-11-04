@@ -352,13 +352,14 @@ const thisBotFunctions = {
                     timestamp = Math.floor(localTime.getTime() / 1000) - timeDifference
                 }
                 if (localTime < now) {
-                    // console.log(localTime)
+                    console.log(localTime)
+                    console.log(now)
                     localTime.setFullYear(currentYear + 1)
-                    let convertedtimestampString = new Date(timestamp * 1000)
+                    // let convertedtimestampString = new Date(timestamp * 1000)
                     // console.log("converted:",typeof convertedtimestampString)
-                    convertedtimestampString.setFullYear(currentYear + 1)
+                    // convertedtimestampString.setFullYear(currentYear + 1)
                     // console.log("updated convert:",convertedtimestampString)
-                    timestamp = Math.floor(convertedtimestampString.getTime() / 1000)
+                    // timestamp = Math.floor(convertedtimestampString.getTime() / 1000)
 
                 }
                 // console.log(timestamp)
