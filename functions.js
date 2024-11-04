@@ -351,22 +351,15 @@ const thisBotFunctions = {
                     timeDifference = timeDifference * 3600 * (user_sign === "+" ? 1 : -1)
                     timestamp = Math.floor(localTime.getTime() / 1000) - timeDifference
                 }
+    
                 if (localTime < now) {
-                    console.log(localTime)
-                    console.log(now)
                     localTime.setFullYear(currentYear + 1)
-                    // let convertedtimestampString = new Date(timestamp * 1000)
-                    // console.log("converted:",typeof convertedtimestampString)
-                    // convertedtimestampString.setFullYear(currentYear + 1)
-                    // console.log("updated convert:",convertedtimestampString)
-                    // timestamp = Math.floor(convertedtimestampString.getTime() / 1000)
-
                 }
-                // console.log(timestamp)
-                // if (timestamp < Math.floor(now.getTime() / 1000)) {
-                //     errorList.push(`Invalid input: Time cannot be in the past`)
-                //     return errorList
-                // }
+    
+                if (timestamp < Math.floor(now.getTime() / 1000)) {
+                    errorList.push(`Invalid input: Time cannot be in the past`)
+                    return errorList
+                }
                 if (testMode) {
                     console.log("Final Timestamp:", timestamp)
                 }
