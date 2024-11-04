@@ -155,20 +155,19 @@ module.exports = {
             function getRank(inputArray,inputRank) {
                 const clean_ranks = []
                 inputRank = inputRank.split(/><|> </)
-                let theRanks = config[botIdent().activeBot.botName].general_stuff.allRanks //requires role ids
-                function retry_theRanks() {
-                    theRanks = config[botIdent().activeBot.botName].general_stuff.testServer.allRanks_testServer
-                    if (!theRanks) { 
-                        console.log("[config.js], No general_stuff.testServer.allRanks_testServer found for experience.js for test server".red); 
-                        return 0
-                    }
-                    if (theRanks) { return theRanks }
-                }
+                let theRanks = process.env.MODE == "PROD"
+                    ? config[botIdent().activeBot.botName].general_stuff.allRanks
+                    : config[botIdent().activeBot.botName].general_stuff.testServer.allRanks_testServer
+                
+                let continueRank = null
                 for (let rank of inputRank) {
-                    const cleanRank = rank.replace(/\D/g,'')
-                    let item = null;
-                    try { item = theRanks.find(i => i.id == cleanRank).rank_name } catch(e) { item = retry_theRanks(); item = item.find(i => i.id == cleanRank).rank_name }
-                    try { id = theRanks.find(i=>i.id == cleanRank).id } catch(e) { id = retry_theRanks(); id = id.find(i=>i.id == cleanRank).id }
+                    const cleanId = rank.replace(/\D/g,'')
+                    let item = theRanks.find(i => i.id == cleanId)?.rank_name || false
+                    let id = theRanks.find(i=>i.id == cleanId)?.id || false
+                    if (!id || !item) { 
+                        interaction.followUp({ content: `Bad XSF Rank Entered` }); 
+                        return false
+                    }
                     clean_ranks.push({[item]:0,id:id})
                 }
                 clean_ranks.forEach(searchRank => {
@@ -189,6 +188,7 @@ module.exports = {
 
             if (mysql_opord_response.length > 0) {
                 const ranks = getRank(mysql_opord_response,input)
+                if (!ranks) return
                 let embed = new Discord.EmbedBuilder()
                     .setTitle('Experience Credit')
                     .setAuthor({ name: interaction.member.nickname, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
