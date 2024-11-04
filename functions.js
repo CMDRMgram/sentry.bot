@@ -283,11 +283,11 @@ const thisBotFunctions = {
     
             function localTimeToUTCTimestamp(localTimeStr) {
                 if (!localTimeStr) {
-                    errorList.push(`Invalid input: Local time string is undefined: ${localTimeStr}`)
+                    errorList.push(`Invalid input format. Local time string is undefined: ${localTimeStr}`)
                     return errorList
                 }
                 if (dateTime.indexOf('/') === -1) {
-                    errorList.push(`Invalid input: Missing '/' in dateTime string. Expected format '15/Mmm HHMM'`)
+                    errorList.push(`Invalid input format. Missing '/' in dateTime string. Expected format '15/Mmm HHMM'`)
                     return errorList
                 }
                 const parts = localTimeStr.split(' ')
@@ -297,16 +297,16 @@ const thisBotFunctions = {
                 }
                 const [dayStr, monthStr] = parts[0].split('/')
                 if (!/^\d+$/.test(dayStr)) {
-                    errorList.push(`Invalid input. Day must contain only numbers. Expected format '15/Mmm HHMM'`)
+                    errorList.push(`Invalid input format. Day must contain only numbers. Expected format '15/Mmm HHMM'`)
                     return errorList
                 }
                 if (!/^[a-zA-Z]+$/.test(monthStr)) {
-                    errorList.push(`Invalid input. Month must contain only letters. Expected format '15/Mmm HHMM'`)
+                    errorList.push(`Invalid input format. Month must contain only letters. Expected format '15/Mmm HHMM'`)
                     return errorList
                 }
                 const timeStr = parts[1]
                 if (!/^\d{4}$/.test(timeStr)) {
-                    errorList.push(`Invalid input. Expected format '15/Mmm HHMM'`)
+                    errorList.push(`Invalid input format. Expected format '15/Mmm HHMM'`)
                     return errorList
                 }
                 const hourStr = timeStr.slice(0, 2)
@@ -314,18 +314,18 @@ const thisBotFunctions = {
     
                 const day = parseInt(dayStr)
                 if (day < 1 || day > 31) {
-                    errorList.push(`Invalid day: Day must be between 1 and 31. Expected format '15/Mmm HHMM'`)
+                    errorList.push(`Invalid day format. Day must be between 1 and 31. Expected format '15/Mmm HHMM'`)
                     return errorList
                 }
                 const month = monthToNumber(monthStr)
                 if (month === undefined) {
-                    errorList.push(`Invalid month: Month abbreviation is not recognized. Expected format '15/Mmm HHMM'`)
+                    errorList.push(`Invalid month format. Month abbreviation is not recognized. Expected format '15/Mmm HHMM'`)
                     return errorList
                 }
                 const hour = parseInt(hourStr)
                 const minute = parseInt(minuteStr)
                 if (hour < 0 || hour > 23 || minute < 0 || minute > 59) {
-                    errorList.push(`Invalid time: Hour must be between 0 and 23, minute must be between 0 and 59. Expected format '15/Mmm HHMM'`)
+                    errorList.push(`Invalid time format. Hour must be between 0 and 23, minute must be between 0 and 59. Expected format '15/Mmm HHMM'`)
                     return errorList
                 }
                 
@@ -355,10 +355,10 @@ const thisBotFunctions = {
                 if (localTime < now) {
                     localTime.setFullYear(currentYear + 1)
                 }
-    
+            
                 if (timestamp < Math.floor(now.getTime() / 1000)) {
-                    errorList.push(`Invalid input: Time cannot be in the past`)
-                    return errorList
+                    localTime.setFullYear(currentYear + 1)
+                    timestamp = Math.floor(localTime.getTime() / 1000)
                 }
                 if (testMode) {
                     console.log("Final Timestamp:", timestamp)
