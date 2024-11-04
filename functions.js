@@ -351,15 +351,16 @@ const thisBotFunctions = {
                     timeDifference = timeDifference * 3600 * (user_sign === "+" ? 1 : -1)
                     timestamp = Math.floor(localTime.getTime() / 1000) - timeDifference
                 }
-    
                 if (localTime < now) {
                     localTime.setFullYear(currentYear + 1)
                 }
-    
+                timestamp = Math.floor(localTime.getTime() / 1000)
+                
                 if (timestamp < Math.floor(now.getTime() / 1000)) {
                     errorList.push(`Invalid input: Time cannot be in the past`)
                     return errorList
                 }
+
                 if (testMode) {
                     console.log("Final Timestamp:", timestamp)
                 }
@@ -373,10 +374,18 @@ const thisBotFunctions = {
             }
             if (testMode) { console.log('---------------------------------') }
             return localTimeToUTCTimestamp(dateTime)
-        } catch (e) {
-            console.log("/timegen", e)
-            return "malformed"
         } 
+        catch (err) {
+            console.log("/timegen", err)
+            botLog(interaction.guild,new Discord.EmbedBuilder()
+                .setDescription('```' + err.stack + '```')
+                .setTitle(`⛔ Fatal error experienced. /timegen`)
+                ,2
+                ,'error'
+            )
+            return "malformed"
+        }
+
     },
     hasSpecifiedRole: async (member,specifiedRanks) => {
         let approvalRanks = specifiedRanks
