@@ -42,7 +42,7 @@ module.exports = {
                 .addChoices({ name: "All", value: "all"})
                 .addChoices({ name: "Test", value: "test"})
         )
-        // .setDefaultMemberPermissions(Discord.PermissionFlagsBits.Administrator)
+        .setDefaultMemberPermissions(Discord.PermissionFlagsBits.Administrator)
     ,
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: false })

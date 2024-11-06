@@ -725,13 +725,9 @@ module.exports = {
         //Get database stuff
         try {
             const values = [userId]
-            
             const sql = `SELECT * FROM promotion WHERE userId = (?)`
             const response = await database.query(sql, values)
             if (response.length > 0) { promotion = response[0] }
-            else {
-                //do code to editReply to the embed saying there was no database info for this test.
-            }
         }
         catch (err) {
             console.log(err)
@@ -742,7 +738,6 @@ module.exports = {
                 ,'error'
             )
         }
-        // console.log("grading progress:",promotion.grading_progress)
         let percentage = 
         promotion.grading_number == 0 
             ? getPercentage(0, promotion.question_num) 
@@ -876,7 +871,7 @@ module.exports = {
                         const blkMsg = await leadership_thread.send(`❌ User failed the test, retake inprogress...`)
                         const values = [final_score,promotion.userId] 
                         const sql = `UPDATE promotion SET 
-                            score = (?), 
+                            score = 0, 
                             requestor_embedId = '[]', 
                             section = 'researchability', 
                             ind = 0, 
