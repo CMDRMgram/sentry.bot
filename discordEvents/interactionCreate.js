@@ -1026,7 +1026,7 @@ const exp = {
                                 return config[botIdent().activeBot.botName].general_stuff.testServer.allRanks_testServer.map(i => i.rank_name)
                             }
                             else {
-                                return config[botIdent().activeBot.botName].allRanks.map(i => i.rank_name)
+                                return config[botIdent().activeBot.botName].general_stuff.allRanks.map(i => i.rank_name)
                             }
                         },
                         allRanksIds: function(rank) {
@@ -1034,7 +1034,7 @@ const exp = {
                                 return config[botIdent().activeBot.botName].general_stuff.testServer.allRanks_testServer.map(i => i)
                             }
                             else {
-                                return config[botIdent().activeBot.botName].allRanks.map(i => i)
+                                return config[botIdent().activeBot.botName].general_stuff.allRanks.map(i => i)
                             }
                         }
                     }
