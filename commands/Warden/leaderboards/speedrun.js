@@ -103,8 +103,9 @@ module.exports = {
 						const milliseconds = Number(ms)
 						return `${seconds}.${milliseconds.toString().padStart(3, '0')}`
 					}
-				
-					if (timeFunc(db_timeStuff.seconds, db_timeStuff.milliseconds) <= timeFunc(timeStuff.seconds, timeStuff.milliseconds)) {
+					// console.log(Number(timeFunc(db_timeStuff.seconds, db_timeStuff.milliseconds)) <= Number(timeFunc(timeStuff.seconds, timeStuff.milliseconds)))
+
+					if (Number(timeFunc(db_timeStuff.seconds, db_timeStuff.milliseconds)) <= Number(timeFunc(timeStuff.seconds, timeStuff.milliseconds))) {
 						const abortEmbed = new Discord.EmbedBuilder()
 							.setColor('#f20505')
 							.setTitle(`**Speedrun Submission Aborted**`)
