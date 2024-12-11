@@ -86,7 +86,7 @@ module.exports = {
 		let date = new Date(totalMilliseconds)
 		const timeString = date.toISOString().substr(11, 8) + '.' + String(timeStuff.milliseconds).padStart(3, '0')
 
-		try {
+		try { 
 			// user = '677514454262480896'
 			const values = [user,args.variant,args.shipclass]
 			const sql = 'SELECT * FROM `speedrun` WHERE user_id = (?) AND variant = (?) AND class = (?)';
