@@ -98,6 +98,7 @@ if (botFunc.adjustActive(os.hostname(),type)) {
 function mainOperation(){ 
 	// Start the bot with the correct .env
 	require("dotenv").config({ path: `${botFunc.botIdent().activeBot.env}` });
+	console.log("ENV TEST:".yellow,process.env.MODE)
 	
 
 	// Discord client setup
