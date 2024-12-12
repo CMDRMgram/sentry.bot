@@ -118,7 +118,7 @@ function mainOperation(){
 	let commandsColl = bot.commands = new Discord.Collection()
 
 	bot.on("ready", async() => {
-		console.log("Test Hit".yellow)
+		console.log("[STARTUP]".yellow,`${botFunc.botIdent().activeBot.botName}`.green,"Login Process Completed:".magenta,`✅`)
 		await botFunc.deployCommands(commandsColl,REST,Routes,bot)
 		botFunc.botLog(bot,new Discord.EmbedBuilder().setDescription(`💡 ${bot.user.username} online! logged in as ${bot.user.tag}`).setTitle(`${bot.user.username} Online`),0);
 		global.guild = bot.guilds.cache.first() 
@@ -257,7 +257,7 @@ function mainOperation(){
 			
 			
 		}
-		console.log("[STARTUP]".yellow,`${botFunc.botIdent().activeBot.botName}`.green,"Bot has Logged In:".magenta,'✅');
+		console.log("[STARTUP]".yellow,`${botFunc.botIdent().activeBot.botName}`.green,"Bot has Loaded In:".magenta,'✅');
 	})
 	bot.on('error', async() => {
 		console.log("error somewhere".red)
@@ -267,7 +267,10 @@ function mainOperation(){
 		if (item) { return item}
 		else { console.log("[ENV]".red,"ERROR".bgRed,"ENV file Malformed or Missing".yellow); return false }
 	}
-	if (checkENV(process.env.TOKEN)) { bot.login(process.env.TOKEN) }
+	if (checkENV(process.env.TOKEN)) { 
+		console.log("[STARTUP]".yellow,`${botFunc.botIdent().activeBot.botName}`.green,"Initiating Login Process:".magenta,`🕗`)
+		bot.login(process.env.TOKEN) 
+	}
 	// General error handling
 	process.on('uncaughtException', function (err) {
 		const dateTime = botFunc.generateDateTime();
