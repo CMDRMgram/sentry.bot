@@ -63,7 +63,7 @@ if (process.env.MODE != "PROD") {
 // Imported Modules
 const Discord = require("discord.js")
 const { REST } = require('@discordjs/rest')
-const { Routes } = require('discord-api-types/v10')
+const { Routes } = require('discord-api-types/v9')
 const botFunc = require('./functions.js')
 const cron = require('node-cron');
 const fs = require('fs');
