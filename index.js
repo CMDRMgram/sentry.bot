@@ -262,8 +262,14 @@ function mainOperation(){
 	bot.on('debug', console.log) 
 	bot.on('warn', console.log)
 	bot.rest.on('rateLimited', console.log)  
-	bot.on('rateLimit', (info) => {
-		console.log(`Rate limit hit: ${JSON.stringify(info)}`);
+	bot.rest.on('rateLimit', (info) => {
+		console.log('Rate limit hit:');
+		console.log(`Timeout: ${info.timeout}ms`);
+		console.log(`Limit: ${info.limit}`);
+		console.log(`Method: ${info.method}`);
+		console.log(`Path: ${info.path}`);
+		console.log(`Route: ${info.route}`);
+		console.log(`Global: ${info.global}`);
 	  });
 	// Have the bot login
 	function checkENV(item) {
