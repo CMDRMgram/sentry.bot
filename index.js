@@ -116,7 +116,7 @@ function mainOperation(){
 	 * @author  (testfax) Medi0cr3 @testfax
 	 */
 	let commandsColl = bot.commands = new Discord.Collection()
-	console.log("bot".yellow,bot)
+
 	bot.on("ready", async() => {
 		console.log("Test Hit".yellow)
 		await botFunc.deployCommands(commandsColl,REST,Routes,bot)
@@ -258,6 +258,9 @@ function mainOperation(){
 			
 		}
 		console.log("[STARTUP]".yellow,`${botFunc.botIdent().activeBot.botName}`.green,"Bot has Logged In:".magenta,'✅');
+	})
+	bot.on('error', async() => {
+		console.log("error somewhere".red)
 	})
 	// Have the bot login
 	function checkENV(item) {
