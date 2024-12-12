@@ -102,14 +102,23 @@ function mainOperation(){
 
 	// Discord client setup
 	const serverIntents = new Discord.IntentsBitField(3276799)
-	const bot = new Discord.Client({ intents: serverIntents, partials: [Discord.Partials.User, Discord.Partials.Message, Discord.Partials.Channel, Discord.Partials.Reaction] })
+	const bot = new Discord.Client({ 
+		intents: serverIntents, 
+		partials: [
+			Discord.Partials.User, 
+			Discord.Partials.Message, 
+			Discord.Partials.Channel, 
+			Discord.Partials.Reaction
+		] 
+	})
 	/**
 	 * Loads command objects from the commands folder
 	 * @author  (testfax) Medi0cr3 @testfax
 	 */
 	let commandsColl = bot.commands = new Discord.Collection()
+	console.log("commandsColl".yellow,commandsColl)
 	bot.on("ready", async() => {
-		console.log("Test Hit")
+		console.log("Test Hit".yellow)
 		await botFunc.deployCommands(commandsColl,REST,Routes,bot)
 		botFunc.botLog(bot,new Discord.EmbedBuilder().setDescription(`💡 ${bot.user.username} online! logged in as ${bot.user.tag}`).setTitle(`${bot.user.username} Online`),0);
 		global.guild = bot.guilds.cache.first() 
