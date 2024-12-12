@@ -268,7 +268,8 @@ function mainOperation(){
 	}
 	if (checkENV(process.env.TOKEN)) { 
 		console.log("[STARTUP]".yellow,`${botFunc.botIdent().activeBot.botName}`.green,"Initiating Login Process:".magenta,`🕗`)
-		bot.login(process.env.TOKEN) 
+		// bot.login(process.env.TOKEN) 
+		bot.login() 
 	}
 	// General error handling
 	process.on('uncaughtException', function (err) {
