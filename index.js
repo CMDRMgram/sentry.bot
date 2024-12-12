@@ -276,7 +276,7 @@ function mainOperation(){
 			Guild Member Modifications	10 requests per 10 seconds per guild.
 			Command Interactions		Limited by user interaction timing (~1 second).
 	   */
-		console.log('Rate limit hit:'.red);
+		console.log('Potential Rate limit hit:'.red);
 		console.log(info)
 		botFunc.botLog(guild,new Discord.EmbedBuilder()
 			.setTitle(`⛔ Potential Rate Limit`)
