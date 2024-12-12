@@ -291,7 +291,7 @@ function mainOperation(){
 				{ name: `route:`, value: `${info.route}`, inline: false },
 				{ name: `scope:`, value: `${info.scope}`, inline: false },
 				{ name: `sublimitTimeout:`, value: `${info.sublimitTimeout}`, inline: false },
-				{ name: `timeToReset:`, value: `${info.timeToReset}`, inline: false },
+				{ name: `timeToReset(ms):`, value: `${info.timeToReset}`, inline: false },
 				{ name: `url:`, value: `${info.url}`, inline: false }, 
 			)
 			,2
