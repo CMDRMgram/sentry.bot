@@ -258,9 +258,9 @@ function mainOperation(){
 		}
 		console.log("[STARTUP]".yellow,`${botFunc.botIdent().activeBot.botName}`.green,"Bot has Loaded In:".magenta,'✅');
 	})
-	bot.once('error', async() => {
-		console.log("error somewhere".red)
-	})
+	bot.on('error', console.log)
+	bot.on('debug', console.log)
+	bot.on('warn', console.log)
 	// Have the bot login
 	function checkENV(item) {
 		if (item) { return item}
