@@ -98,8 +98,6 @@ if (botFunc.adjustActive(os.hostname(),type)) {
 function mainOperation(){ 
 	// Start the bot with the correct .env
 	require("dotenv").config({ path: `${botFunc.botIdent().activeBot.env}` });
-	console.log("ENV TEST:".yellow,process.env.MODE)
-	
 
 	// Discord client setup
 	const serverIntents = new Discord.IntentsBitField(3276799)
@@ -118,7 +116,7 @@ function mainOperation(){
 	 */
 	let commandsColl = bot.commands = new Discord.Collection()
 
-	bot.on("ready", async() => {
+	bot.once("ready", async() => {
 		console.log("[STARTUP]".yellow,`${botFunc.botIdent().activeBot.botName}`.green,"Login Process Completed:".magenta,`✅`)
 		await botFunc.deployCommands(commandsColl,REST,Routes,bot)
 		botFunc.botLog(bot,new Discord.EmbedBuilder().setDescription(`💡 ${bot.user.username} online! logged in as ${bot.user.tag}`).setTitle(`${bot.user.username} Online`),0);
@@ -260,7 +258,7 @@ function mainOperation(){
 		}
 		console.log("[STARTUP]".yellow,`${botFunc.botIdent().activeBot.botName}`.green,"Bot has Loaded In:".magenta,'✅');
 	})
-	bot.on('error', async() => {
+	bot.once('error', async() => {
 		console.log("error somewhere".red)
 	})
 	// Have the bot login
