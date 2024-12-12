@@ -282,19 +282,17 @@ function mainOperation(){
 			.setTitle(`⛔ Potential Rate Limit`)
 			.setDescription('Monitor server for rate limiting.')
 			.addFields(
-				{
-					name: `Global:`, value: `${info.global}`, inline: false,
-					name: `Hash:`, value: `${info.hash}`, inline: false,
-					name: `Limit:`, value: `${info.limit}`, inline: false,
-					name: `majorParameter:`, value: `${info.majorParameter}`, inline: false,
-					name: `method:`, value: `${info.method}`, inline: false,
-					name: `retryAfter:`, value: `${info.retryAfter}`, inline: false,
-					name: `route:`, value: `${info.route}`, inline: false,
-					name: `scope:`, value: `${info.scope}`, inline: false,
-					name: `sublimitTimeout:`, value: `${info.sublimitTimeout}`, inline: false,
-					name: `timeToReset:`, value: `${info.timeToReset}`, inline: false,
-					name: `url:`, value: `${info.url}`, inline: false,
-				}
+				{ name: `Global:`, value: `${info.global}`, inline: false },
+				{ name: `Hash:`, value: `${info.hash}`, inline: false },
+				{ name: `Limit:`, value: `${info.limit}`, inline: false },
+				{ name: `majorParameter:`, value: `${info.majorParameter}`, inline: false },
+				{ name: `method:`, value: `${info.method}`, inline: false },
+				{ name: `retryAfter:`, value: `${info.retryAfter}`, inline: false },
+				{ name: `route:`, value: `${info.route}`, inline: false },
+				{ name: `scope:`, value: `${info.scope}`, inline: false },
+				{ name: `sublimitTimeout:`, value: `${info.sublimitTimeout}`, inline: false },
+				{ name: `timeToReset:`, value: `${info.timeToReset}`, inline: false },
+				{ name: `url:`, value: `${info.url}`, inline: false }, 
 			)
 			,2
 			,'error'
