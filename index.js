@@ -116,7 +116,7 @@ function mainOperation(){
 	 * @author  (testfax) Medi0cr3 @testfax
 	 */
 	let commandsColl = bot.commands = new Discord.Collection()
-	console.log("commandsColl".yellow,commandsColl)
+	console.log("bot".yellow,bot)
 	bot.on("ready", async() => {
 		console.log("Test Hit".yellow)
 		await botFunc.deployCommands(commandsColl,REST,Routes,bot)
