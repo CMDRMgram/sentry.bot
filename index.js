@@ -262,7 +262,9 @@ function mainOperation(){
 	bot.on('debug', console.log) 
 	bot.on('warn', console.log)
 	bot.rest.on('rateLimited', console.log)  
-
+	bot.on('rateLimit', (info) => {
+		console.log(`Rate limit hit: ${JSON.stringify(info)}`);
+	  });
 	// Have the bot login
 	function checkENV(item) {
 		if (item) { return item}
@@ -270,8 +272,8 @@ function mainOperation(){
 	}
 	if (checkENV(process.env.TOKEN)) { 
 		console.log("[STARTUP]".yellow,`${botFunc.botIdent().activeBot.botName}`.green,"Initiating Login Process:".magenta,`🕗`)
-		bot.login(process.env.TOKEN) 
-		// bot.login() 
+		bot.login(process.env.TOKEN)
+		// bot.login()
 	}
 	// General error handling
 	process.on('uncaughtException', function (err) {
