@@ -84,7 +84,7 @@ const thisBotFunctions = {
     },
     deployCommands: async (commandsColl,REST,Routes,client) => {
 		try {
-            
+            console.log("[STARTUP]".yellow, `${thisBotFunctions.botIdent().activeBot.botName}`.green,"Loading Commands:".magenta,"🕗")
             //Load Commands
 			let commands = [];
 			const commandFolders = fs.readdirSync('./commands');

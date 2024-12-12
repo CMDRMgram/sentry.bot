@@ -98,7 +98,7 @@ if (botFunc.adjustActive(os.hostname(),type)) {
 function mainOperation(){ 
 	// Start the bot with the correct .env
 	require("dotenv").config({ path: `${botFunc.botIdent().activeBot.env}` });
-	console.log("[STARTUP]".yellow, `${botFunc.botIdent().activeBot.botName}`.green,"Loading Commands:".magenta,"🕗")
+	
 
 	// Discord client setup
 	const serverIntents = new Discord.IntentsBitField(3276799)
@@ -129,12 +129,12 @@ function mainOperation(){
 					}
 				}
 			}
-		}
+		} 
 		if (botFunc.botIdent().activeBot.botName == 'Warden') {
 			const database = await require(`./${botFunc.botIdent().activeBot.botName}/db/database`)
 			warden_vars = database
 
-			// Scheduled Role Backup Task
+			
 			if(process.env.MODE == "PROD") {
 				const leaderboards = ['speedrun','ace']
 				leaderboards.forEach(i => { checkLeaderboards(i) })
@@ -212,7 +212,7 @@ function mainOperation(){
 						}
 					})
 				}
-
+				// Scheduled Role Backup Task
 				// cron.schedule('*/5 * * * *', function () {
 				// 	//TODO REBUILD THIS, not absolutely necessary, as people that leave the server showup in the staff channel with all previous roles.
 				// 	// backupClubRoles()
