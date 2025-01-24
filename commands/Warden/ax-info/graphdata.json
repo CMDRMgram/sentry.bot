@@ -1,5 +1,12 @@
 [
     {
+        "argument": "axexperimentalroute",
+        "title": "AX Experimental Engineering Route",
+        "description": "Shows graphics route on best route for experimentals on ax weapons",
+        "link": "https://xenostrikeforce.com/wp-content/uploads/2025/01/srtoeeomfaxc_nologo.png",
+        "type": "text"
+    },
+    {
         "argument": "spirecompass",
         "title": "Spire Clock Positions",
         "description": "Shows graphics on spire clock positions",
