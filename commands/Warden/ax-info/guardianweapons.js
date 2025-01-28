@@ -17,7 +17,7 @@ module.exports = {
             {name: 'Modified Shard Cannon'                 , value: 'Space shotgun that deals high alpha damage to hull and shields, has a 5 round clip, has higher armor piercing. Primarily used in class 2 size, with class 1 being used for niche fits.', inline: false},
             {name: 'Modified Plasma Charger'               , value: 'Charge-up projectile weapon that deals high alpha damage to hull and shields, has a 20 round clip, charges up to do 17x damage over 2 seconds. Primarily used in class 2 size, with class 1 being used for niche fits.', inline: false},  
             {name: '__Purchased with Credits__'            , value: 'Guardian Plasma Charger, Guardian Shard Cannon, Guardian Gauss Cannon', inline: false},
-            {name: 'Available at'                          , value: 'Any Guardian tech broker', inline: false},
+            {name: 'Available at'                          , value: 'Any Guardian Tech Broker', inline: false},
             {name: 'Blueprint Unlocks'                     , value: 'Guardian Weapons require **Guardian Weapon Blueprints** to unlock, see: https://wiki.antixenoinitiative.com/en/guardianunlocks', inline: false},
             {name: '__Purchase per Module with Materials__', value: 'Modified Plasma Charger, Modified ShardCannon, Modified Gauss Cannon', inline: false},
             {name: 'Available at'                          , value: 'Prospect\'s Deep in the Mbooni system', inline: false},
