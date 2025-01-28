@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const { botIdent } = require('../../../functions');
 module.exports = {
     data: new Discord.SlashCommandBuilder()
-    .setName(`guardianwep`)
+    .setName(`guardianweapons`)
     .setDescription(`Info Guardian Weapons`),
     // .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     permissions:0,
