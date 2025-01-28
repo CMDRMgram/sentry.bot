@@ -3,7 +3,7 @@ const { botIdent } = require('../../../functions');
 module.exports = {
     data: new Discord.SlashCommandBuilder()
     .setName(`preengineered`)
-    .setDescription(`Where to purchase pre-engineered modules.`),
+    .setDescription(`Where to purchase pre-engineered weapons and modules`),
     // .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     permissions:0,
     execute (interaction) {
