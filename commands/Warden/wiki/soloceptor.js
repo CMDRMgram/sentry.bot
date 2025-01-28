@@ -17,7 +17,7 @@ module.exports = {
 		  {name: "`Pleiades Sector MI-S B4-0`", value: "Historically known as The Zoo, it used to be the only system where solo Hydras could be found; it is still a recommended Hydra hunting ground."})
 
         const buttonRow = new Discord.ActionRowBuilder()
-        .addComponents(new Discord.ButtonBuilder().setLabel('Learn more about the Zoo').setStyle(Discord.ButtonStyle.Link).setURL('https://wiki.antixenoinitiative.com/en/nhss'),)
+        .addComponents(new Discord.ButtonBuilder().setLabel('Learn more about the NHSSes').setStyle(Discord.ButtonStyle.Link).setURL('https://wiki.antixenoinitiative.com/en/nhss'),)
 
         interaction.reply({ embeds: [returnEmbed.setTimestamp()], components: [buttonRow] });
     }
