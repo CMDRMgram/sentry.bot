@@ -3,7 +3,7 @@ const { botIdent } = require('../../../functions');
 module.exports = {
     data: new Discord.SlashCommandBuilder()
     .setName(`guardianweapons`)
-    .setDescription(`Info Guardian Weapons`),
+    .setDescription(`Information on Guardian Weapons`),
     // .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     permissions:0,
     execute (interaction) {
